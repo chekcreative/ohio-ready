@@ -10,7 +10,14 @@ const useStyles = makeStyles((theme) => ({
   sidebarWrapper: {
     width: '243px',
     flexShrink: '0',
-    padding: '16px'
+    padding: '16px',
+    [theme.breakpoints.down('xs')]: {
+      width: '100vw',
+      position: 'fixed',
+      top: '0px',
+      left: '0px',
+      borderRadius: '0px'
+    }
   }
 }));
 

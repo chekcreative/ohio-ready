@@ -57,6 +57,7 @@ function DateDisplay() {
       {
         topLevelDates.map((date, i) =>
           <button 
+            key={i}
             onClick={() => setSelectedDateIndex(i)}
             className={
               selectedDateIndex == i ?
