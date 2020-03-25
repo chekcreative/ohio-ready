@@ -20,7 +20,11 @@ const useStyles = makeStyles((theme) => ({
   },
   container: {
     paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4)
+    paddingBottom: theme.spacing(4),
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: '0px',
+      paddingRight: '0px'
+    }
   },
   mainFlexWrapper: {
     display: 'flex'

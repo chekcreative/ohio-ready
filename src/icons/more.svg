@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="4px" viewBox="0 0 16 4" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>more</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons" transform="translate(-38.000000, -44.000000)" fill="#000000">
+            <path d="M40,44 C38.9,44 38,44.9 38,46 C38,47.1 38.9,48 40,48 C41.1,48 42,47.1 42,46 C42,44.9 41.1,44 40,44 L40,44 Z M52,44 C50.9,44 50,44.9 50,46 C50,47.1 50.9,48 52,48 C53.1,48 54,47.1 54,46 C54,44.9 53.1,44 52,44 L52,44 Z M46,44 C44.9,44 44,44.9 44,46 C44,47.1 44.9,48 46,48 C47.1,48 48,47.1 48,46 C48,44.9 47.1,44 46,44 L46,44 Z" id="more"></path>
+        </g>
+    </g>
+</svg>
