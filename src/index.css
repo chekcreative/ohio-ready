@@ -11,3 +11,41 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+* {
+  box-sizing: border-box;
+
+  /* default font */
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  line-height: 16px;
+  font-weight: 500;
+  color: #757575;
+}
+
+h2 {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 24px;
+  line-height: 25px;
+  font-weight: 600;
+  color: #000;
+  margin: 0px 0px 20px 0px;
+}
+
+h6 {
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0px;
+}
+
+a {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  line-height: 19px;
+  color: #4B00FF;
+  text-decoration: underline;
+}
+
+a:hover {
+  cursor: pointer;
+}

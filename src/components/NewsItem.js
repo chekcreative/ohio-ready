@@ -10,9 +10,11 @@ import Chip from '@material-ui/core/Chip';
 
 // icons 
 import share from '../icons/share.svg'
+import globe from '../icons/globe.svg'
+import link from '../icons/link.svg'
 
 const useStyles = makeStyles((theme) => ({
-  cardStyling: {
+  newsCard: {
     padding: '16px',
     maxWidth: '100%'
   },
@@ -20,7 +22,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    marginBottom: '14.5px'
   },
   chipWrapper: {
     flexShrink: '1', 
@@ -31,6 +34,42 @@ const useStyles = makeStyles((theme) => ({
     flexShrink : '0',
     flexGrow: '0',
     width: '24px'
+  },
+  date: {
+  },
+  newsCardHeading: {
+    maxWidth: '580px'
+  },
+  newsCardInnerWrapper: {
+    paddingRight: '48px',
+    [theme.breakpoints.down('xs')]: {
+      paddingRight: '0px'
+    }
+  },
+  coverageSourceWrapper: {
+    display: 'flex'
+  },
+  coverageSourceIcon: {
+    marginTop: '2px',
+    marginRight: '10px'
+  },
+  coverageWrapper: {
+    display: 'flex',
+    width: '50%',
+    alignItems: 'flex-start'
+  },
+  innerCoverageWrapper: {
+    display: 'flex',
+    flexDirection: 'column'
+  },
+  sourceWrapper: {
+    display: 'flex',
+    width: '50%',
+    alignItems: 'flex-start'
+  },
+  innerSourceWrapper: {
+    display: 'flex',
+    flexDirection: 'column'
   }
 }));
 
@@ -53,8 +92,31 @@ const NewsItem = (props) => {
     tagsArray.push(matchingTag)
   })
 
+  // date functions
+  const publishedDate = new Date(props.newsObject.attributes.published_on)
+  const monthIndex = publishedDate.getMonth()
+  const dateDate = publishedDate.getDate()
+  const dateYear = publishedDate.getFullYear()
+  const months = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC'
+  ]
+  const dateMonth = months[monthIndex]
+  const dateString = `${dateMonth} ${dateDate}, ${dateYear}`
+
+
   return (
-    <Card className={classes.cardStyling}>
+    <Card className={classes.newsCard}>
 
       {/* chips & share icon */}
         <div className={classes.chipShareWrapper}>
@@ -99,32 +161,72 @@ const NewsItem = (props) => {
 
       {/* ====================================================================== */}
 
-      {/* images, if applicable */}
+      <div className={classes.newsCardInnerWrapper}>
+        {/* images, if applicable */}
 
-      {/* ====================================================================== */}
+        {/* ====================================================================== */}
 
-      {/* date */}
+        {/* date */}
+        {
+          props.newsObject.attributes &&
+          props.newsObject.attributes.published_on ?
+          <div className={classes.date}>
+            { dateString }
+          </div> :
+          null
+        }
 
-      {/* ====================================================================== */}
+        {/* ====================================================================== */}
 
-      {/* title */}
-      {
-        props.newsObject.attributes.title ?
-        <h2>
-          { props.newsObject.attributes.title }
-        </h2> : 
-        null
-      }
+        {/* title */}
+        {
+          props.newsObject.attributes.title ?
+          <h2 className={classes.newsCardHeading}>
+            { props.newsObject.attributes.title }
+          </h2> : 
+          null
+        }
 
-      {/* ====================================================================== */}
+        {/* ====================================================================== */}
 
-      {/* tweet, if applicable */}
+        {/* tweet, if applicable */}
+
+        
+      </div>
 
       {/* ====================================================================== */}
 
       {/* coverage & source */}
-      coverage: relationships.article (array)
-      source: attributes.authoritative_url (singular)
+      <div className={classes.coverageSourceWrapper}>
+        <div className={classes.coverageWrapper}>
+          <img src={globe} className={classes.coverageSourceIcon}></img>
+          <div className={classes.innerCoverageWrapper}>
+            <h6>Coverage</h6>
+            {/* TODO: find out what the data below is structured like, to finish this section */}
+            {/* coverage: relationships.article (array) */}
+          </div>
+        </div>
+        <div className={classes.sourceWrapper}>
+          <img src={link} className={classes.coverageSourceIcon}></img>
+          <div className={classes.innerSourceWrapper}>
+            <h6>Source</h6>
+            {
+              props.newsObject.attributes &&
+              props.newsObject.attributes.authoritative_url ?
+              <a href={ props.newsObject.attributes.authoritative_url }>
+                {   
+                  authorizer &&
+                  authorizer.attributes &&
+                  authorizer.attributes.name ? 
+                  authorizer.attributes.name : 
+                  null
+                }
+              </a> : 
+              null
+            }
+          </div>
+        </div>
+      </div>
 
     </Card>
   );

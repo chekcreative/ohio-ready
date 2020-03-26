@@ -26,6 +26,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function NewsWrapper() {
+
+  // config state
   const classes = useStyles();
   const [newsObjects, setNewsObjects] = useState([
     {
@@ -77,13 +79,14 @@ function NewsWrapper() {
         }
       }
     ])
-
+  
+  // run on load
   useEffect(() => {
     loadEvents()
   }, [])
 
   const loadEvents = () => {
-    axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article`, axiosHeader)
+    axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=2`, axiosHeader)
     .then(
       (res) => {
         console.log(res)
