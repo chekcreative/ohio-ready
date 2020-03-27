@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 
 // custom components
-import Sidebar from './components/Sidebar'
+import Sidebar from './components/sidebar/Sidebar'
 import NewsWrapper from './components/NewsWrapper'
 import DateDisplay from './components/DateDisplay'
 

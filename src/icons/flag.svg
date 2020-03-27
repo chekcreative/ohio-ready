@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="33px" height="25px" viewBox="0 0 33 25" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>flag</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="temp" transform="translate(-154.000000, -732.000000)" stroke="#4300FF">
+            <g id="flag" transform="translate(155.000000, 734.000000)">
+                <g id="Group-3">
+                    <polygon id="Path-2" stroke-width="2" points="0 0 0 21 29.3759766 17.1369757 22.5600586 10.5 29.3759766 4.15553043"></polygon>
+                    <polygon id="Path-3" stroke-width="2" points="17.6464844 10.5 0 1 0 20"></polygon>
+                    <circle id="Oval" stroke-width="2" cx="5.18164062" cy="10" r="2"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
