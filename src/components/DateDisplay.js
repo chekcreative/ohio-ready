@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import {connect} from "react-redux";
+import {setDateFromDisplay} from "../actions/actions";
 
 // styling
 import clsx from 'clsx';
@@ -38,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function DateDisplay() {
+function DateDisplay({dateIndex, onDateSelection}) {
   const classes = useStyles();
 
   // TODO: Work this into a live generated array within the context of the API, and likely, Redux
@@ -50,19 +52,17 @@ function DateDisplay() {
     '2019'
   ]);
 
-  const [selectedDateIndex, setSelectedDateIndex] = useState(0);
-
   return (
     <div className={classes.dateDisplayWrapper}>
       {
         topLevelDates.map((date, i) =>
           <button 
             key={i}
-            onClick={() => setSelectedDateIndex(i)}
+            onClick={() => onDateSelection(i)}
             className={
-              selectedDateIndex == i ?
-              clsx(classes.displayDateButton, classes.displayDateButtonActive) : 
-              classes.displayDateButton
+              dateIndex === i ?
+                clsx(classes.displayDateButton, classes.displayDateButtonActive) :
+                classes.displayDateButton
             }>
             { date }
           </button>
@@ -72,4 +72,18 @@ function DateDisplay() {
   );
 }
 
-export default DateDisplay;
+function mapStateToProps(state) {
+  return {
+    dateIndex: state.dateIndex
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onDateSelection: (dateIndex) => {
+      dispatch(setDateFromDisplay(dateIndex))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DateDisplay)
