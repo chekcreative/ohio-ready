@@ -8,6 +8,8 @@ import Card from '@material-ui/core/Card';
 
 // components
 import Statistics from './Statistics'
+import OhioMap from './OhioMap'
+import InfectionCurve from './InfectionCurve'
 import FooterIcons from './FooterIcons'
 
 // icons
@@ -119,14 +121,13 @@ function Sidebar() {
         </div>
 
         <hr className={classes.sidebarHR}/>
-
         <Statistics></Statistics>
 
         <hr className={classes.sidebarHR}/>
-        MAP HERE
+        <OhioMap></OhioMap>
 
         <hr className={classes.sidebarHR}/>
-        CHART HERE
+        <InfectionCurve></InfectionCurve>
 
         {/* FOOTER ICONS FOR MOBILE */}
         <div className={classes.footerIconMobile}>

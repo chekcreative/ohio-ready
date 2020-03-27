@@ -49,3 +49,7 @@ a {
 a:hover {
   cursor: pointer;
 }
+
+.ohio_map_county:hover {
+  fill: #4B00FF;
+}
