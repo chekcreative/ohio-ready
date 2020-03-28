@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {connect} from "react-redux";
 import {setDateFromDisplay} from "../actions/actions";
+import {generateDateDisplayOptions, today} from "../utils/dateDisplayOptions";
 
 // styling
 import clsx from 'clsx';
@@ -40,31 +41,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function DateDisplay({dateIndex, onDateSelection}) {
+function DateDisplay({viewDate, onDateSelection}) {
   const classes = useStyles();
 
-  // TODO: Work this into a live generated array within the context of the API, and likely, Redux
-  const [topLevelDates] = useState([
-    'TODAY',
-    'MARCH',
-    'FEB',
-    'JAN',
-    '2019'
-  ]);
+  // TODO: Determine date range based on results from the API
+  const earliestDate = new Date(2019, 11, 1);
+  const dateOptions = generateDateDisplayOptions(today(), earliestDate);
+
+  const isActiveDateOption = (i) => {
+    return dateOptions[i+1]
+        ? new Date(dateOptions[i].date) >= viewDate && viewDate > new Date(dateOptions[i+1].date)
+        : new Date(dateOptions[i].date) >= viewDate;
+  };
 
   return (
     <div className={classes.dateDisplayWrapper}>
       {
-        topLevelDates.map((date, i) =>
+        dateOptions.map(({display, date}, i) =>
           <button 
             key={i}
-            onClick={() => onDateSelection(i)}
+            onClick={() => onDateSelection(date)}
             className={
-              dateIndex === i ?
+              isActiveDateOption(i) ?
                 clsx(classes.displayDateButton, classes.displayDateButtonActive) :
                 classes.displayDateButton
             }>
-            { date }
+            { display }
           </button>
         )
       }
@@ -74,7 +76,7 @@ function DateDisplay({dateIndex, onDateSelection}) {
 
 function mapStateToProps(state) {
   return {
-    dateIndex: state.dateIndex
+    viewDate: new Date(state.viewDate)
   }
 }
 
