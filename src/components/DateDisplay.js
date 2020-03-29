@@ -45,7 +45,7 @@ function DateDisplay({viewDate, onDateSelection}) {
   const classes = useStyles();
 
   // TODO: Determine date range based on results from the API
-  const earliestDate = new Date(2019, 11, 1);
+  const earliestDate = new Date(2020, 0, 1);
   const dateOptions = generateDateDisplayOptions(today(), earliestDate);
 
   const isActiveDateOption = (i) => {
