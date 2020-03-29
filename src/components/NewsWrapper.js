@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
+import debounce from 'lodash.debounce';
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -13,6 +14,7 @@ import NewsItem from './NewsItem'
 // utils
 import axios from 'axios';
 import axiosHeader from '../utils/axiosHeader'
+import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -79,33 +81,52 @@ function NewsWrapper() {
         }
       }
     ])
-  
+
+  const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
+  const [pagesRemain, setPagesRemain] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const _showMore = useRef(null);
+
   // run on load
   useEffect(() => {
     loadEvents()
   }, [])
 
-  const loadEvents = () => {
-    axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=2`, axiosHeader)
-    .then(
-      (res) => {
-        console.log(res)
-        if (res.data.data) {
-          setNewsObjects(res.data.data)
-        }
-        if (res.data.included) {
-          console.log((res.data.included))
-          setIncluded(res.data.included)
 
-        }
-      }
-    )
-    .catch(
-      (err) => {
-        console.log(err)
-      }
-    )
-  }
+  const loadEvents = () => {
+    setIsLoadingMore(true);
+    axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`, axiosHeader)
+        .then(
+            (res) => {
+              console.log(res)
+              if (res.data.data) {
+                setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data)
+              }
+              if (res.data.included) {
+                console.log((res.data.included))
+                setIncluded(numberPagesLoaded ? included.concat(res.data.included) : res.data.included)
+              }
+              if (res.data.meta?.pagination?.pages) {
+                setPagesRemain(res.data.meta.pagination.pages > (numberPagesLoaded + 1))
+              }
+              setNumberPagesLoaded(numberPagesLoaded+1)
+              setIsLoadingMore(false);
+            }
+        )
+        .catch(
+            (err) => {
+              console.log(err)
+              setIsLoadingMore(false);
+            }
+        )
+  };
+
+  window.onscroll = debounce(() => {
+    const scrolledToBottom = window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight;
+    if (scrolledToBottom) {
+      loadEvents();
+    }
+  }, 200);
 
   return (
     <Grid container spacing={2} direction="column" className={classes.cardsWrapper}>
@@ -116,6 +137,7 @@ function NewsWrapper() {
         </Grid>
         )
       }
+      {pagesRemain && <Button onClick={loadEvents} ref={_showMore}>{isLoadingMore ? "LOADING MORE..." : "SHOW MORE"}</Button>}
     </Grid>
   );
 }
