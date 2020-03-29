@@ -1,12 +1,14 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
+import {setDateFromScroll} from "../actions/actions";
+import {connect} from "react-redux";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
 
 // material ui components
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
+import Button from "@material-ui/core/Button";
 
 // custom components
 import NewsItem from './NewsItem'
@@ -14,7 +16,6 @@ import NewsItem from './NewsItem'
 // utils
 import axios from 'axios';
 import axiosHeader from '../utils/axiosHeader'
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -27,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function NewsWrapper() {
+function NewsWrapper(props) {
 
   // config state
   const classes = useStyles();
@@ -85,7 +86,6 @@ function NewsWrapper() {
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
   const [pagesRemain, setPagesRemain] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const _showMore = useRef(null);
 
   // run on load
   useEffect(() => {
@@ -121,25 +121,53 @@ function NewsWrapper() {
         )
   };
 
+  const updateViewDate = () => {
+    const newsItemGrids = [...document.getElementsByName("newsItemGrid")];
+
+    const ixTopNewsItem = newsItemGrids.findIndex(element => {
+      return element.offsetTop > document.documentElement.scrollTop
+    });
+
+    const topNewsItem = newsObjects[ixTopNewsItem];
+    const publishedDate = new Date(topNewsItem.attributes.published_on);
+    console.log(publishedDate.toISOString());
+
+    props.onScrollDateChange(publishedDate.toISOString());
+  };
+
+
   window.onscroll = debounce(() => {
-    const scrolledToBottom = window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight;
+    const scrolledToBottom = window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.offsetHeight;
     if (scrolledToBottom) {
       loadEvents();
     }
+
+    updateViewDate();
   }, 200);
 
   return (
     <Grid container spacing={2} direction="column" className={classes.cardsWrapper}>
       {
         newsObjects.map((newsObject, i) =>
-        <Grid item key={'newsItem' + i} style={{maxWidth: '100%'}}>
-          <NewsItem newsObject={newsObject} included={included}></NewsItem>
-        </Grid>
+          <Grid item key={'newsItem' + i} style={{maxWidth: '100%'}} name="newsItemGrid">
+            <NewsItem newsObject={newsObject} included={included}/>
+          </Grid>
         )
       }
-      {pagesRemain && <Button onClick={loadEvents} ref={_showMore}>{isLoadingMore ? "LOADING MORE..." : "SHOW MORE"}</Button>}
+      {pagesRemain && <Button onClick={loadEvents}>{isLoadingMore ? "LOADING MORE..." : "SHOW MORE"}</Button>}
     </Grid>
   );
 }
 
-export default NewsWrapper;
+// TODO: Change scroll position based on redux view date
+const mapStateToProps = null;
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onScrollDateChange: (onScrollDateChange) => {
+      dispatch(setDateFromScroll(onScrollDateChange))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsWrapper)
