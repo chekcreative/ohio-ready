@@ -1,4 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
+import {connect} from "react-redux";
+import {setDateFromDisplay} from "../actions/actions";
+import {generateDateDisplayOptions, today} from "../utils/dateDisplayOptions";
 
 // styling
 import clsx from 'clsx';
@@ -38,33 +41,32 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function DateDisplay() {
+function DateDisplay({viewDate, onDateSelection}) {
   const classes = useStyles();
 
-  // TODO: Work this into a live generated array within the context of the API, and likely, Redux
-  const [topLevelDates] = useState([
-    'TODAY',
-    'MARCH',
-    'FEB',
-    'JAN',
-    '2019'
-  ]);
+  // TODO: Determine date range based on results from the API
+  const earliestDate = new Date(2020, 0, 1);
+  const dateOptions = generateDateDisplayOptions(today(), earliestDate);
 
-  const [selectedDateIndex, setSelectedDateIndex] = useState(0);
+  const isActiveDateOption = (i) => {
+    return dateOptions[i+1]
+        ? new Date(dateOptions[i].date) >= viewDate && viewDate > new Date(dateOptions[i+1].date)
+        : new Date(dateOptions[i].date) >= viewDate;
+  };
 
   return (
     <div className={classes.dateDisplayWrapper}>
       {
-        topLevelDates.map((date, i) =>
+        dateOptions.map(({display, date}, i) =>
           <button 
             key={i}
-            onClick={() => setSelectedDateIndex(i)}
+            onClick={() => onDateSelection(date)}
             className={
-              selectedDateIndex == i ?
-              clsx(classes.displayDateButton, classes.displayDateButtonActive) : 
-              classes.displayDateButton
+              isActiveDateOption(i) ?
+                clsx(classes.displayDateButton, classes.displayDateButtonActive) :
+                classes.displayDateButton
             }>
-            { date }
+            { display }
           </button>
         )
       }
@@ -72,4 +74,18 @@ function DateDisplay() {
   );
 }
 
-export default DateDisplay;
+function mapStateToProps(state) {
+  return {
+    viewDate: new Date(state.viewDate)
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onDateSelection: (dateIndex) => {
+      dispatch(setDateFromDisplay(dateIndex))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DateDisplay)
