@@ -57,7 +57,7 @@ function Statistics(props) {
       <div className={classes.statisticsRow}>
         <div className={classes.statisticDiv2}>
           <h6 className={classes.statisticDivTitle}>TOTAL INFECTED</h6>
-          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>10,000</span>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{props.totalInfected}</span>
         </div>
         <div className={classes.statisticDiv3}>
           <h6 className={classes.statisticDivTitle}>AS OF</h6>
@@ -65,17 +65,20 @@ function Statistics(props) {
         </div>
       </div>
       <div className={classes.statisticsRow}>
-        <div className={classes.statisticDiv3}>
+
+        {/* SICK is in the design, but we are not yet able to get data on it */}
+        {/* <div className={classes.statisticDiv3}>
           <h6 className={classes.statisticDivTitle}>SICK</h6>
-          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>10,000</span>
-        </div>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>-</span>
+        </div> */}
+
         <div className={classes.statisticDiv3}>
           <h6 className={classes.statisticDivTitle}>RECOVERED</h6>
-          <span className={clsx(classes.statisticNumber, classes.statisticNumberGreen)}>10,000</span>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberGreen)}>{props.totalRecovered}</span>
         </div>
         <div className={classes.statisticDiv3}>
           <h6 className={classes.statisticDivTitle}>DEATHS</h6>
-          <span className={clsx(classes.statisticNumber, classes.statisticNumberPurple)}>10,000</span>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberPurple)}>{props.totalDeaths}</span>
         </div>
       </div>
     </div>

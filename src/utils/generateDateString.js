@@ -1,3 +1,4 @@
+// returns string formatted like "JAN 01, 2020" or "JAN 01" based on displayYearBool for use with UI components
 export default function (dateToGen, displayYearBool) {
   const publishedDate = new Date(dateToGen)
   const monthIndex = publishedDate.getMonth()

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 // redux
 import {connect} from "react-redux";
@@ -22,6 +22,9 @@ import calendar from '../../icons/cal_white.svg'
 
 // utils
 import generateDateString from '../../utils/generateDateString'
+import generateAsOfDate from '../../utils/generateAsOfDate'
+import axios from 'axios';
+import axiosHeader from '../../utils/axiosHeader'
 
 const useStyles = makeStyles((theme) => ({
   sidebarWrapper: {
@@ -114,11 +117,63 @@ const useStyles = makeStyles((theme) => ({
 function Sidebar(props) {
   const classes = useStyles();
 
+  const [allCountiesData, updateAllCountiesData] = useState([])
+
+  const [totalInfected, updateTotalInfected] = useState('-')
+  const [totalRecovered, updateTotalRecovered] = useState('-')
+  const [totalDeaths, updateTotalDeaths] = useState('-')
+
   let dateString = generateDateString(props.viewDate, false)
 
   useEffect(() => {
     dateString = generateDateString(props.viewDate, false)
+    getCaseData(props.viewDate)
   }, [props.viewDate])
+
+  useEffect(() => {
+    calculateStatTotals()
+  }, [allCountiesData])
+
+  const getCaseData = (asOfDate) => {
+    let as_of_date = generateAsOfDate(asOfDate)
+    axios.get(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`, axiosHeader)
+    .then(
+      (res) => {
+        if (res.status === 200) {
+          if (res.data.data) {
+            updateAllCountiesData(res.data.data)
+          }
+        }
+      }
+    )
+    .catch(
+      (err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  const calculateStatTotals = () => {
+    let totalInfected = 0
+    let totalRecovered = 0
+    let totalDeaths = 0
+
+    allCountiesData.forEach( (county) => {
+      if (county.attributes.total) {
+        totalInfected += county.attributes.total
+      }
+      if (county.attributes.recovered) {
+        totalRecovered += county.attributes.recovered
+      }
+      if (county.attributes.deaths) {
+        totalDeaths += county.attributes.deaths
+      }
+    })
+
+    updateTotalInfected(totalInfected)
+    updateTotalRecovered(totalRecovered)
+    updateTotalDeaths(totalDeaths)
+  }
 
   return (
     <div className={classes.sidebarWrapper}>
@@ -141,7 +196,12 @@ function Sidebar(props) {
           </div>
 
           <hr className={classes.sidebarHR}/>
-          <Statistics dateString={dateString}></Statistics>
+          <Statistics 
+            dateString={dateString}
+            totalInfected={totalInfected}
+            totalRecovered={totalRecovered}
+            totalDeaths={totalDeaths}
+            ></Statistics>
 
           <hr className={classes.sidebarHR}/>
           <OhioMap></OhioMap>
