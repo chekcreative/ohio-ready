@@ -1,6 +1,7 @@
 import React from 'react';
 
 // styling
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles';
 
 // material ui components
@@ -97,6 +98,10 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.down('xs')]: {
       display: 'none'
     }
+  },
+  stickyTop: {
+    position: 'sticky',
+    top: '10px',
   }
 }));
 
@@ -104,43 +109,46 @@ function Sidebar() {
   const classes = useStyles();
   return (
     <div className={classes.sidebarWrapper}>
-      <Card className={classes.sidebarCard}>
+      <div className={classes.stickyTop}>
 
-        {/* CARD HEADER */}
-        <div className={classes.sidebarCardHeader}>
-          <div className={classes.iconNameWrapper}>
-            <img src={logo} alt="" className={classes.ohioIcon} />
-            <div>
-              <h1 className={classes.sidebarTitle}>Ohio Ready</h1>
-              <h2 className={classes.sidebarSubTitle}>A Timeline of COVID-19</h2>
+        <Card className={classes.sidebarCard}>
+
+          {/* CARD HEADER */}
+          <div className={classes.sidebarCardHeader}>
+            <div className={classes.iconNameWrapper}>
+              <img src={logo} alt="" className={classes.ohioIcon} />
+              <div>
+                <h1 className={classes.sidebarTitle}>Ohio Ready</h1>
+                <h2 className={classes.sidebarSubTitle}>A Timeline of COVID-19</h2>
+              </div>
+            </div>
+            <div className={classes.calendarIconWrapper}>
+              <img src={calendar} alt=""/>
             </div>
           </div>
-          <div className={classes.calendarIconWrapper}>
-            <img src={calendar} alt=""/>
+
+          <hr className={classes.sidebarHR}/>
+          <Statistics></Statistics>
+
+          <hr className={classes.sidebarHR}/>
+          <OhioMap></OhioMap>
+
+          <hr className={classes.sidebarHR}/>
+          <InfectionCurve></InfectionCurve>
+
+          {/* FOOTER ICONS FOR MOBILE */}
+          <div className={classes.footerIconMobile}>
+            <FooterIcons></FooterIcons>
           </div>
-        </div>
+          
+        </Card>
 
-        <hr className={classes.sidebarHR}/>
-        <Statistics></Statistics>
-
-        <hr className={classes.sidebarHR}/>
-        <OhioMap></OhioMap>
-
-        <hr className={classes.sidebarHR}/>
-        <InfectionCurve></InfectionCurve>
-
-        {/* FOOTER ICONS FOR MOBILE */}
-        <div className={classes.footerIconMobile}>
+        {/* FOOTER ICONS FOR DESKTOP */}
+        <div className={classes.footerIconDesktop}>
           <FooterIcons></FooterIcons>
         </div>
-        
-      </Card>
 
-      {/* FOOTER ICONS FOR DESKTOP */}
-      <div className={classes.footerIconDesktop}>
-        <FooterIcons></FooterIcons>
       </div>
-
     </div>
   );
 }
