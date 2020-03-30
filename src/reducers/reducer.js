@@ -2,7 +2,7 @@ import {SET_DATE_FROM_DISPLAY, SET_DATE_FROM_SCROLL} from "../actions/actions";
 import {today} from "../utils/dateDisplayOptions";
 
 const initialState = {
-    viewDate: today()
+    viewDate: today().toISOString()
 };
 
 export default function rootReducer(state = initialState, action) {

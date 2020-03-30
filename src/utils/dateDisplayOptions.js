@@ -22,7 +22,7 @@ function allMonthsLeadingUpTo(currentMonth, currentYear) {
     return [...Array(currentMonth)].map((_, ix) => {
         return {
             display: monthDisplayNames[currentMonth - ix - 1],
-            date: new Date(currentYear, currentMonth - ix, 1).toISOString()
+            dateString: new Date(currentYear, currentMonth - ix, 1).toISOString()
         }
     });
 }
@@ -31,7 +31,7 @@ function allYearsBetween(earliestYear, currentYear) {
     return [...Array(currentYear - earliestYear)].map((_, ix) => {
         return {
             display: (currentYear - ix - 1).toString(),
-            date: new Date(currentYear - ix, 0, 1).toISOString()
+            dateString: new Date(currentYear - ix, 0, 1).toISOString()
         }
     });
 }
@@ -40,7 +40,7 @@ function allMonthsBetween(earliestMonth, currentMonth, currentYear) {
     return [...Array(currentMonth - earliestMonth)].map((_, ix) => {
         return {
             display: monthDisplayNames[currentMonth - ix - 1],
-            date: new Date(currentYear, currentMonth - ix, 1).toISOString()
+            dateString: new Date(currentYear, currentMonth - ix, 1).toISOString()
         }
     });
 }
@@ -65,7 +65,7 @@ export function generateDateDisplayOptions(currentDate, earliestDate) {
     return [
         {
             display: "TODAY",
-            date: currentDate.toISOString()
+            dateString: currentDate.toISOString()
         },
         ...earlierMonths,
         ...earlierYears,

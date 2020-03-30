@@ -38,6 +38,10 @@ const useStyles = makeStyles((theme) => ({
     transition: 'all linear .3s',
     position: 'relative',
     left: '-2px'
+  },
+  stickyTop: {
+    position: 'sticky',
+    top: '10px',
   }
 }));
 
@@ -50,26 +54,28 @@ function DateDisplay({viewDate, onDateSelection}) {
 
   const isActiveDateOption = (i) => {
     return dateOptions[i+1]
-        ? new Date(dateOptions[i].date) >= viewDate && viewDate > new Date(dateOptions[i+1].date)
-        : new Date(dateOptions[i].date) >= viewDate;
+        ? new Date(dateOptions[i].dateString) >= viewDate && viewDate > new Date(dateOptions[i+1].dateString)
+        : new Date(dateOptions[i].dateString) >= viewDate;
   };
 
   return (
     <div className={classes.dateDisplayWrapper}>
-      {
-        dateOptions.map(({display, date}, i) =>
-          <button 
-            key={i}
-            onClick={() => onDateSelection(date)}
-            className={
-              isActiveDateOption(i) ?
-                clsx(classes.displayDateButton, classes.displayDateButtonActive) :
-                classes.displayDateButton
-            }>
-            { display }
-          </button>
-        )
-      }
+      <div className={classes.stickyTop}>
+        {
+          dateOptions.map(({display, dateString}, i) =>
+            <button
+              key={i}
+              onClick={() => onDateSelection(dateString)}
+              className={
+                isActiveDateOption(i) ?
+                  clsx(classes.displayDateButton, classes.displayDateButtonActive) :
+                  classes.displayDateButton
+              }>
+              { display }
+            </button>
+          )
+        }
+      </div>
     </div>
   );
 }
@@ -82,8 +88,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    onDateSelection: (dateIndex) => {
-      dispatch(setDateFromDisplay(dateIndex))
+    onDateSelection: (dateString) => {
+      dispatch(setDateFromDisplay(dateString))
     }
   }
 }
