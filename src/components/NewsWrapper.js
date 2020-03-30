@@ -1,12 +1,15 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
+import {setDateFromScroll} from "../actions/actions";
+import {connect} from "react-redux";
+import {sampleIncluded, sampleNewsObjects} from "../sampleData/singleObject";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
 
 // material ui components
 import Grid from '@material-ui/core/Grid';
-import Card from '@material-ui/core/Card';
+import Button from "@material-ui/core/Button";
 
 // custom components
 import NewsItem from './NewsItem'
@@ -14,132 +17,190 @@ import NewsItem from './NewsItem'
 // utils
 import axios from 'axios';
 import axiosHeader from '../utils/axiosHeader'
-import Button from "@material-ui/core/Button";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
     flexShrink: '1', 
     flexGrow: '1', 
     padding: '0px 16px',
+    position: 'relative',
     [theme.breakpoints.down('xs')]: {
-      padding: '0px 8px'
+      padding: '0px 8px',
+      position: 'static'
     }
+  },
+  showMoreButton: {
+    position: 'static',
+  },
+  loadingCover: {
+    position: 'absolute',
+    height: '100%',
+    zIndex: 10,
+    backgroundColor: 'hsla(0, 0%, 35%, 0.9)',
+    top: '0',
+    left: '16px',
+    right: '16px'
+  },
+  loadingText: {
+    paddingTop: '150px',
+    fontSize: '24px',
+    color: '#fff',
+    textAlign: 'center',
+    fontWeight: 'bold',
+    position: 'sticky',
+    top: '0',
   }
 }));
 
-function NewsWrapper() {
+function NewsWrapper(props) {
 
   // config state
   const classes = useStyles();
-  const [newsObjects, setNewsObjects] = useState([
-    {
-      attributes: {
-        authoritative_url: "https://apnews.com/65163e344a4725c823c34be60a2da1ce",
-        content: "",
-        published_on: "2020-03-24",     
-        scope: "National",
-        summary: "",
-        title: "President Donald Trump is trying to reopen businesses within next few weeks"
-      },
-      id: "1058",
-      relationships: {
-        article: {
-          data: [], 
-          meta: {
-            count: 0
-          }
-        },
-        authoritative_publisher: {data: null},
-        authorizer: {
-          data: {
-            type: "authorizers",
-            id: "88"
-          }, 
-          links: {
-            related: "http://ohioready-api.zwink.net/v1/authorizer/88/"
-          }
-        },
-        tags: {
-          data: [
-            {
-              type: "tags", 
-              id: "11"
-            }
-          ], 
-          meta: {count: 1}
-        },
-        type: "events"
-      }
-    }
-  ]);
-  const [included, setIncluded] = useState([
-      {
-        type: "authorizers",
-        id: "75", 
-        attributes: {
-          name: "Grocery Stores"
-        }
-      }
-    ])
+  const [newsObjects, setNewsObjects] = useState([]);
+  const [included, setIncluded] = useState([]);
 
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
-  const [pagesRemain, setPagesRemain] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const _showMore = useRef(null);
+  const [morePagesAvailable, setMorePagesAvailable] = useState(true);
+  const [morePagesNeeded, setMorePagesNeeded] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
+  const NEWS_ITEM_NAME = "newsItem";
 
-  // run on load
   useEffect(() => {
-    loadEvents()
-  }, [])
+    const viewDate = new Date(props.viewDate);
+
+    const earliestFetchedPublishDate = getEarliestFetchedPublishDate();
+    if (viewDate < earliestFetchedPublishDate){
+      newsObjects.length && setMorePagesNeeded(true);
+      loadEvents()
+    } else {
+      setMorePagesNeeded(false);
+      const publishDateOfFirstVisible = getPublishDateOfFirstVisibleNewsItem();
+      if (
+        publishDateOfFirstVisible &&
+        (viewDate < publishDateOfFirstVisible || viewDate > publishDateOfFirstVisible)
+      ) {
+        const scrollPosition = getPositionOfFirstNewsItemPublishedBefore(viewDate);
+        window.scrollTo(0, scrollPosition)
+      }
+    }
+  }, [props.viewDate, newsObjects]);
 
 
   const loadEvents = () => {
-    setIsLoadingMore(true);
-    axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`, axiosHeader)
+    setIsFetching(true);
+    if (morePagesAvailable) {
+      axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`, axiosHeader)
         .then(
-            (res) => {
-              console.log(res)
-              if (res.data.data) {
-                setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data)
-              }
-              if (res.data.included) {
-                console.log((res.data.included))
-                setIncluded(numberPagesLoaded ? included.concat(res.data.included) : res.data.included)
-              }
-              if (res.data.meta?.pagination?.pages) {
-                setPagesRemain(res.data.meta.pagination.pages > (numberPagesLoaded + 1))
-              }
-              setNumberPagesLoaded(numberPagesLoaded+1)
-              setIsLoadingMore(false);
+          (res) => {
+            if (res.data.data) {
+              setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data);
             }
+            if (res.data.included) {
+              setIncluded(numberPagesLoaded ? included.concat(res.data.included) : res.data.included)
+            }
+            if (res.data.meta?.pagination?.pages) {
+              setMorePagesAvailable(res.data.meta.pagination.pages > (numberPagesLoaded + 1))
+            }
+            setNumberPagesLoaded(numberPagesLoaded+1);
+          }
         )
         .catch(
-            (err) => {
-              console.log(err)
-              setIsLoadingMore(false);
-            }
+          (err) => {
+            console.log(err);
+          }
         )
+        .then(() => {
+            setIsFetching(false);
+          }
+        )
+    }
+  };
+
+  const getEarliestFetchedPublishDate = () => {
+    return newsObjects.length
+      ? new Date(newsObjects[newsObjects.length-1].attributes.published_on)
+      : new Date();
+  };
+
+  const getPositionOfFirstNewsItemPublishedBefore = (date) => {
+    const ixNewsObjectToScrollTo = newsObjects.findIndex(object =>
+      new Date(object.attributes.published_on) <= date
+    );
+
+    const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
+    const elementToScrollTo = newsItemElements[ixNewsObjectToScrollTo];
+    return elementToScrollTo.offsetTop;
+  };
+
+  const getPublishDateOfFirstVisibleNewsItem = () => {
+    if (newsObjects.length) {
+      const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
+
+      const ixFirstVisibleNewsItem = newsItemElements.findIndex(element =>
+        element.offsetTop >= document.documentElement.scrollTop
+      );
+
+      return ixFirstVisibleNewsItem > -1
+        ? new Date(newsObjects[ixFirstVisibleNewsItem].attributes.published_on)
+        : new Date(newsObjects[0].attributes.published_on);
+    }
+
+    return null
+  };
+
+  const updateViewDate = () => {
+    const publishedDate = getPublishDateOfFirstVisibleNewsItem();
+    if (publishedDate) {
+      props.onScrollDateChange(publishedDate.toISOString());
+    }
   };
 
   window.onscroll = debounce(() => {
-    const scrolledToBottom = window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight;
+    const scrolledToBottom = window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.offsetHeight;
     if (scrolledToBottom) {
       loadEvents();
     }
+
+    updateViewDate();
   }, 200);
 
   return (
     <Grid container spacing={2} direction="column" className={classes.cardsWrapper}>
       {
         newsObjects.map((newsObject, i) =>
-        <Grid item key={'newsItem' + i} style={{maxWidth: '100%'}}>
-          <NewsItem newsObject={newsObject} included={included}></NewsItem>
-        </Grid>
+          <Grid item key={'newsItem' + i} style={{maxWidth: '100%'}} name={NEWS_ITEM_NAME}>
+            <NewsItem newsObject={newsObject} included={included}/>
+          </Grid>
         )
       }
-      {pagesRemain && <Button onClick={loadEvents} ref={_showMore}>{isLoadingMore ? "LOADING MORE..." : "SHOW MORE"}</Button>}
+      {
+        morePagesAvailable &&
+        <Button onClick={loadEvents} className={classes.showMoreButton}>
+          {isFetching ? "LOADING MORE..." : "SHOW MORE"}
+        </Button>
+      }
+      {
+        morePagesNeeded &&
+        <div className={classes.loadingCover}>
+          <h1 className={classes.loadingText}>LOADING...</h1>
+        </div>
+      }
     </Grid>
   );
 }
 
-export default NewsWrapper;
+function mapStateToProps(state) {
+  return {
+    viewDate: state.viewDate
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onScrollDateChange: (onScrollDateChange) => {
+      dispatch(setDateFromScroll(onScrollDateChange))
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NewsWrapper)
