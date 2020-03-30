@@ -13,6 +13,9 @@ import share from '../icons/share.svg'
 import globe from '../icons/globe.svg'
 import link from '../icons/link.svg'
 
+// utils
+import generateDateString from '../utils/generateDateString'
+
 const useStyles = makeStyles((theme) => ({
   newsCard: {
     padding: '16px',
@@ -92,28 +95,8 @@ const NewsItem = (props) => {
     tagsArray.push(matchingTag)
   })
 
-  // date functions
-  const publishedDate = new Date(props.newsObject.attributes.published_on)
-  const monthIndex = publishedDate.getMonth()
-  const dateDate = publishedDate.getDate()
-  const dateYear = publishedDate.getFullYear()
-  const months = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC'
-  ]
-  const dateMonth = months[monthIndex]
-  const dateString = `${dateMonth} ${dateDate}, ${dateYear}`
-
+  // format date string
+  const dateString = generateDateString(props.newsObject.attributes.published_on, true)
 
   return (
     <Card className={classes.newsCard}>

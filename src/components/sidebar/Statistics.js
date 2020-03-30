@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState, useEffect } from 'react';
 
 // styling
 import clsx from 'clsx';
@@ -43,32 +43,42 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Statistics() {
+function Statistics(props) {
   const classes = useStyles();
+
+  const [dateString, updateDateString] = useState(props.dateString);
+
+  useEffect(() => {
+    updateDateString(props.dateString)
+  }, [props.dateString])
+
   return (
     <div className={classes.statisticsWrapper}>
       <div className={classes.statisticsRow}>
-        <div class={classes.statisticDiv2}>
-          <h6 class={classes.statisticDivTitle}>TOTAL INFECTED</h6>
-          <span class={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>10,000</span>
+        <div className={classes.statisticDiv2}>
+          <h6 className={classes.statisticDivTitle}>TOTAL INFECTED</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{props.totalInfected}</span>
         </div>
-        <div class={classes.statisticDiv3}>
-          <h6 class={classes.statisticDivTitle}>AS OF</h6>
-          <span class={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>MAR 22</span>
+        <div className={classes.statisticDiv3}>
+          <h6 className={classes.statisticDivTitle}>AS OF</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{ dateString }</span>
         </div>
       </div>
       <div className={classes.statisticsRow}>
-        <div class={classes.statisticDiv3}>
-          <h6 class={classes.statisticDivTitle}>SICK</h6>
-          <span class={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>10,000</span>
+
+        {/* SICK is in the design, but we are not yet able to get data on it */}
+        {/* <div className={classes.statisticDiv3}>
+          <h6 className={classes.statisticDivTitle}>SICK</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>-</span>
+        </div> */}
+
+        <div className={classes.statisticDiv3}>
+          <h6 className={classes.statisticDivTitle}>RECOVERED</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberGreen)}>{props.totalRecovered}</span>
         </div>
-        <div class={classes.statisticDiv3}>
-          <h6 class={classes.statisticDivTitle}>RECOVERED</h6>
-          <span class={clsx(classes.statisticNumber, classes.statisticNumberGreen)}>10,000</span>
-        </div>
-        <div class={classes.statisticDiv3}>
-          <h6 class={classes.statisticDivTitle}>DEATHS</h6>
-          <span class={clsx(classes.statisticNumber, classes.statisticNumberPurple)}>10,000</span>
+        <div className={classes.statisticDiv3}>
+          <h6 className={classes.statisticDivTitle}>DEATHS</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberPurple)}>{props.totalDeaths}</span>
         </div>
       </div>
     </div>

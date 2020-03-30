@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+// redux
+import {connect} from "react-redux";
+import {setDateFromDisplay} from "../../actions/actions";
 
 // styling
-import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles';
 
 // material ui components
@@ -16,6 +19,12 @@ import FooterIcons from './FooterIcons'
 // icons
 import logo from '../../icons/ohio_ready_icon.svg'
 import calendar from '../../icons/cal_white.svg'
+
+// utils
+import generateDateString from '../../utils/generateDateString'
+import generateAsOfDate from '../../utils/generateAsOfDate'
+import axios from 'axios';
+import axiosHeader from '../../utils/axiosHeader'
 
 const useStyles = makeStyles((theme) => ({
   sidebarWrapper: {
@@ -105,8 +114,81 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Sidebar() {
+function Sidebar(props) {
   const classes = useStyles();
+
+  const [allCountiesData, updateAllCountiesData] = useState([])
+
+  const [totalInfected, updateTotalInfected] = useState('-')
+  const [totalRecovered, updateTotalRecovered] = useState('-')
+  const [totalDeaths, updateTotalDeaths] = useState('-')
+
+  let dateString = generateDateString(props.viewDate, false)
+
+  useEffect(() => {
+    dateString = generateDateString(props.viewDate, false)
+    getCaseData(props.viewDate)
+  }, [props.viewDate])
+
+  useEffect(() => {
+    calculateStatTotals()
+  }, [allCountiesData])
+
+  const getCaseData = (asOfDate) => {
+    let as_of_date = generateAsOfDate(asOfDate)
+    axios.get(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`, axiosHeader)
+    .then(
+      (res) => {
+        if (res.status === 200) {
+          if (res.data.data) {
+            updateAllCountiesData(res.data.data)
+          }
+        }
+      }
+    )
+    .catch(
+      (err) => {
+        console.log(err);
+      }
+    )
+  }
+
+  const calculateStatTotals = () => {
+    let totalInfected = 0
+    let totalRecovered = 0
+    let totalDeaths = 0
+
+    allCountiesData.forEach( (county) => {
+      if (county.attributes.total) {
+        totalInfected += county.attributes.total
+      }
+      if (county.attributes.recovered) {
+        totalRecovered += county.attributes.recovered
+      }
+      if (county.attributes.deaths) {
+        totalDeaths += county.attributes.deaths
+      }
+    })
+
+    if (totalInfected === 0) {
+      updateTotalInfected('N/A')
+    } else {
+      updateTotalInfected(totalInfected)
+    }
+
+    if (totalRecovered === 0) {
+      updateTotalRecovered('N/A')
+    } else {
+      updateTotalRecovered(totalRecovered)
+    }
+
+    if (totalDeaths === 0) {
+      updateTotalDeaths('N/A')
+    } else {
+      updateTotalDeaths(totalDeaths)
+    }
+  }
+
   return (
     <div className={classes.sidebarWrapper}>
       <div className={classes.stickyTop}>
@@ -128,7 +210,12 @@ function Sidebar() {
           </div>
 
           <hr className={classes.sidebarHR}/>
-          <Statistics></Statistics>
+          <Statistics 
+            dateString={dateString}
+            totalInfected={totalInfected}
+            totalRecovered={totalRecovered}
+            totalDeaths={totalDeaths}
+            ></Statistics>
 
           <hr className={classes.sidebarHR}/>
           <OhioMap></OhioMap>
@@ -153,4 +240,15 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+function mapStateToProps(state) {
+  return {
+    viewDate: new Date(state.viewDate)
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
