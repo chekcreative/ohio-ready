@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+
+// redux
+import {connect} from "react-redux";
+import {setDateFromDisplay} from "../../actions/actions";
 
 // styling
-import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles';
 
 // material ui components
@@ -16,6 +19,9 @@ import FooterIcons from './FooterIcons'
 // icons
 import logo from '../../icons/ohio_ready_icon.svg'
 import calendar from '../../icons/cal_white.svg'
+
+// utils
+import generateDateString from '../../utils/generateDateString'
 
 const useStyles = makeStyles((theme) => ({
   sidebarWrapper: {
@@ -105,8 +111,15 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function Sidebar() {
+function Sidebar(props) {
   const classes = useStyles();
+
+  let dateString = generateDateString(props.viewDate, false)
+
+  useEffect(() => {
+    dateString = generateDateString(props.viewDate, false)
+  }, [props.viewDate])
+
   return (
     <div className={classes.sidebarWrapper}>
       <div className={classes.stickyTop}>
@@ -128,7 +141,7 @@ function Sidebar() {
           </div>
 
           <hr className={classes.sidebarHR}/>
-          <Statistics></Statistics>
+          <Statistics dateString={dateString}></Statistics>
 
           <hr className={classes.sidebarHR}/>
           <OhioMap></OhioMap>
@@ -153,4 +166,15 @@ function Sidebar() {
   );
 }
 
-export default Sidebar;
+function mapStateToProps(state) {
+  return {
+    viewDate: new Date(state.viewDate)
+  }
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
