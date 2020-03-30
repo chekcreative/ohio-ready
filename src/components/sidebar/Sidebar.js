@@ -5,6 +5,7 @@ import {connect} from "react-redux";
 import {setDateFromDisplay} from "../../actions/actions";
 
 // styling
+import clsx from 'clsx'
 import { makeStyles } from '@material-ui/core/styles';
 
 // material ui components
@@ -90,6 +91,11 @@ const useStyles = makeStyles((theme) => ({
     height: '1px',
     color: '#979797',
     backgroundColor: '#979797'
+  },
+  onlyDesktopSidebarHR: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
   },
   cardFooterIconWrapper: {
     display: 'flex',
@@ -217,14 +223,16 @@ function Sidebar(props) {
             totalDeaths={totalDeaths}
             ></Statistics>
 
-          <hr className={classes.sidebarHR}/>
+          <hr className={clsx(classes.sidebarHR, classes.onlyDesktopSidebarHR)}/>
           <OhioMap></OhioMap>
 
-          <hr className={classes.sidebarHR}/>
-          <InfectionCurve></InfectionCurve>
+          {/* PAUSED FOR NOW - see https://github.com/chekcreative/ohio-ready/issues/7 */}
+          {/* <hr className={classes.sidebarHR}/>
+          <InfectionCurve></InfectionCurve> */}
 
           {/* FOOTER ICONS FOR MOBILE */}
           <div className={classes.footerIconMobile}>
+            <hr className={classes.sidebarHR}/>
             <FooterIcons></FooterIcons>
           </div>
           

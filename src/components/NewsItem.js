@@ -41,7 +41,8 @@ const useStyles = makeStyles((theme) => ({
   date: {
   },
   newsCardHeading: {
-    maxWidth: '580px'
+    maxWidth: '580px',
+    width: '100%'
   },
   newsCardInnerWrapper: {
     paddingRight: '48px',
