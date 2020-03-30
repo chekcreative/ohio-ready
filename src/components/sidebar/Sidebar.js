@@ -170,9 +170,23 @@ function Sidebar(props) {
       }
     })
 
-    updateTotalInfected(totalInfected)
-    updateTotalRecovered(totalRecovered)
-    updateTotalDeaths(totalDeaths)
+    if (totalInfected === 0) {
+      updateTotalInfected('N/A')
+    } else {
+      updateTotalInfected(totalInfected)
+    }
+
+    if (totalRecovered === 0) {
+      updateTotalRecovered('N/A')
+    } else {
+      updateTotalRecovered(totalRecovered)
+    }
+
+    if (totalDeaths === 0) {
+      updateTotalDeaths('N/A')
+    } else {
+      updateTotalDeaths(totalDeaths)
+    }
   }
 
   return (
