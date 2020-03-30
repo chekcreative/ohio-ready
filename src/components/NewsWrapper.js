@@ -56,8 +56,8 @@ function NewsWrapper(props) {
 
   // config state
   const classes = useStyles();
-  const [newsObjects, setNewsObjects] = useState(sampleNewsObjects);
-  const [included, setIncluded] = useState(sampleIncluded);
+  const [newsObjects, setNewsObjects] = useState([]);
+  const [included, setIncluded] = useState([]);
 
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
   const [morePagesAvailable, setMorePagesAvailable] = useState(true);
