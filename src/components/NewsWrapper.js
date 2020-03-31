@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../actions/actions";
 import {connect} from "react-redux";
-import {sampleIncluded, sampleNewsObjects} from "../sampleData/singleObject";
+import {sampleIncluded, sampleNewsObjects} from "../sampleData/apiData_20200329";
 import {triggeringAgents} from "../reducers/reducer";
 
 // styling
@@ -52,6 +52,9 @@ const useStyles = makeStyles((theme) => ({
     top: '0',
   }
 }));
+
+// to get proper dates
+const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on + " 12:00");
 
 function NewsWrapper(props) {
 
@@ -127,12 +130,12 @@ function NewsWrapper(props) {
 
   const getPositionOfFirstNewsItemPublishedBefore = (date) => {
     const ixNewsObjectToScrollTo = newsObjects.findIndex(object =>
-      new Date(object.attributes.published_on) <= date
+      publishedDate(object) <= date
     );
 
     const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
     const elementToScrollTo = newsItemElements[ixNewsObjectToScrollTo];
-    return elementToScrollTo.offsetTop;
+    return elementToScrollTo.offsetTop + elementToScrollTo.offsetParent.offsetTop;
   };
 
   const getPublishDateOfFirstVisibleNewsItem = () => {
@@ -140,12 +143,12 @@ function NewsWrapper(props) {
       const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
 
       const ixFirstVisibleNewsItem = newsItemElements.findIndex(element =>
-        element.offsetTop >= document.documentElement.scrollTop
+        element.offsetTop + element.offsetParent.offsetTop >= document.documentElement.scrollTop
       );
 
       return ixFirstVisibleNewsItem > -1
-        ? new Date(newsObjects[ixFirstVisibleNewsItem].attributes.published_on)
-        : new Date(newsObjects[0].attributes.published_on);
+        ? publishedDate(newsObjects[ixFirstVisibleNewsItem])
+        : publishedDate(newsObjects[0]);
     }
 
     return null
