@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../actions/actions";
 import {connect} from "react-redux";
-import {sampleIncluded, sampleNewsObjects} from "../sampleData/apiData_20200329";
 import {triggeringAgents} from "../reducers/reducer";
 
 // styling
@@ -63,11 +62,11 @@ function NewsWrapper(props) {
 
   // config state
   const classes = useStyles();
-  const [newsObjects, setNewsObjects] = useState(sampleNewsObjects);
-  const [included, setIncluded] = useState(sampleIncluded);
+  const [newsObjects, setNewsObjects] = useState([]);
+  const [included, setIncluded] = useState([]);
 
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
-  const [morePagesAvailable, setMorePagesAvailable] = useState(false);
+  const [morePagesAvailable, setMorePagesAvailable] = useState(true);
   const [morePagesNeeded, setMorePagesNeeded] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const NEWS_ITEM_NAME = "newsItem";
