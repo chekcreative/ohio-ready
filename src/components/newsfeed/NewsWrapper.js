@@ -1,9 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
-import {setDateFromScroll} from "../actions/actions";
+import {setDateFromScroll} from "../../actions/actions";
 import {connect} from "react-redux";
-import {sampleIncluded, sampleNewsObjects} from "../sampleData/apiData_20200329";
-import {triggeringAgents} from "../reducers/reducer";
+import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
+import {triggeringAgents} from "../../reducers/reducer";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,13 +11,15 @@ import { makeStyles } from '@material-ui/core/styles';
 // material ui components
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
+import Chip from "@material-ui/core/Chip";
 
 // custom components
 import NewsItem from './NewsItem'
+import ActiveFilters from './ActiveFilters'
 
 // utils
 import axios from 'axios';
-import axiosHeader from '../utils/axiosHeader'
+import axiosHeader from '../../utils/axiosHeader'
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -58,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // to get proper dates
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on + " 12:00");
+const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 function NewsWrapper(props) {
 
@@ -71,6 +73,9 @@ function NewsWrapper(props) {
   const [morePagesAvailable, setMorePagesAvailable] = useState(true);
   const [morePagesNeeded, setMorePagesNeeded] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  const [authorizerNameFilter, setAuthorizerNameFilter] = useState(null)
+  const [scopeFilter, setScopeFilter] = useState(null)
+  const [tagFilter, setTagFilter] = useState([])
   const NEWS_ITEM_NAME = "newsItem";
 
   useEffect(() => {
@@ -94,6 +99,10 @@ function NewsWrapper(props) {
       }
     }
   }, [props.viewDate, newsObjects]);
+
+  useEffect(() => {
+    console.log("state change")
+  })
 
 
   const loadEvents = () => {
@@ -125,6 +134,24 @@ function NewsWrapper(props) {
         )
     }
   };
+
+  const toggleAuthorizerNameFilter = (authorizer_name) => {
+    setAuthorizerNameFilter(authorizer_name)
+  }
+
+  const toggleScopeFilter = (scope) => {
+    setScopeFilter(scope)
+  }
+
+  const toggleTagFilter = (tag) => {
+    let currentTagArray = tagFilter
+    if (currentTagArray.includes(tag)) {
+      currentTagArray = currentTagArray.filter(e => e !== tag)
+    } else {
+      currentTagArray.push(tag)
+    }
+    setTagFilter([...currentTagArray])
+  }
 
   const getEarliestFetchedPublishDate = () => {
     return newsObjects.length
@@ -181,9 +208,25 @@ function NewsWrapper(props) {
   return (
     <Grid container spacing={2} direction="column" className={classes.cardsWrapper}>
       {
+        authorizerNameFilter || scopeFilter || tagFilter.length > 0 ?
+        <ActiveFilters
+          authorizerNameFilter={authorizerNameFilter}
+          toggleAuthorizerNameFilter={toggleAuthorizerNameFilter}
+          scopeFilter={scopeFilter}
+          toggleScopeFilter={toggleScopeFilter}
+          tagFilter={tagFilter}
+          toggleTagFilter={toggleTagFilter}></ActiveFilters> : 
+        null
+      }
+      {
         newsObjects.map((newsObject, i) =>
           <Grid item key={'newsItem' + i} style={{maxWidth: '100%'}} name={NEWS_ITEM_NAME}>
-            <NewsItem newsObject={newsObject} included={included}/>
+            <NewsItem 
+              newsObject={newsObject}
+              included={included}
+              toggleAuthorizerNameFilter={toggleAuthorizerNameFilter}
+              toggleScopeFilter={toggleScopeFilter}
+              toggleTagFilter={toggleTagFilter} />
           </Grid>
         )
       }
