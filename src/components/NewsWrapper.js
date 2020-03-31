@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // to get proper dates
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on + " 12:00");
+const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 function NewsWrapper(props) {
 
