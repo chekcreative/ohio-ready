@@ -30,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
     display: 'block',
     transition: 'all linear .3s',
     position: 'relative',
-    left: '0px'
+    left: '0px',
+    cursor: 'pointer'
   },
   displayDateButtonActive: {
     color: '#333333',
@@ -67,9 +68,7 @@ function DateDisplay({viewDate, onDateSelection}) {
               key={i}
               onClick={() => onDateSelection(dateString)}
               className={
-                isActiveDateOption(i) ?
-                  clsx(classes.displayDateButton, classes.displayDateButtonActive) :
-                  classes.displayDateButton
+                clsx(classes.displayDateButton, isActiveDateOption(i) && classes.displayDateButtonActive)
               }>
               { display }
             </button>

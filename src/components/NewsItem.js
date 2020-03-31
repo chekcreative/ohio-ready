@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+// to get correct date to display
+const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on + " 12:00");
+
 const NewsItem = (props) => {
   const classes = useStyles();
 
@@ -96,7 +99,7 @@ const NewsItem = (props) => {
   })
 
   // format date string
-  const dateString = generateDateString(props.newsObject.attributes.published_on, true)
+  const dateString = generateDateString(publishedDate(props.newsObject), true)
 
   return (
     <Card className={classes.newsCard}>
