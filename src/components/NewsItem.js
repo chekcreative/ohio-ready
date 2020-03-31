@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // to get correct date to display
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on + " 12:00");
+const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 const NewsItem = (props) => {
   const classes = useStyles();
