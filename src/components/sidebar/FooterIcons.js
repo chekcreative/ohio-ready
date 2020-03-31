@@ -15,11 +15,17 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexWrap: 'wrap',
     margin: '14px 0px 0px 0px',
-    maxWidth: '100%'
+    maxWidth: '100%',
+    [theme.breakpoints.down('xs')]: {
+      justifyContent: 'space-between'
+    }
   },
   cardFooterIcon: {
     marginRight: '20px',
-    marginBottom: '14px'
+    marginBottom: '14px',
+    [theme.breakpoints.down('xs')]: {
+      marginRight: '0px'
+    }
   },
   
 }));

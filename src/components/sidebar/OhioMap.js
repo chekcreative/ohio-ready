@@ -9,7 +9,10 @@ import OhioMapSVG from './OhioMap.svg'
 
 const useStyles = makeStyles((theme) => ({
   mapWrapper: {
-    padding: '11px 0px'
+    padding: '11px 0px',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
   }
 }));
 

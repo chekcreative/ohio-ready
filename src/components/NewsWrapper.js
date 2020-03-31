@@ -24,10 +24,14 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: '1', 
     padding: '0px 16px',
     position: 'relative',
+    maxWidth: 'calc(100% - 243px - 15px - 68px - 15px)',
     [theme.breakpoints.down('xs')]: {
+      maxWidth: 'calc(100%)',
+      margin: 'auto',
       padding: '0px 8px',
-      position: 'static'
-    }
+      position: 'static',
+      paddingTop: '225px' // TODO: this needs to change dynamically if we shrink the header on scroll, but its static for now
+    } 
   },
   showMoreButton: {
     position: 'static',
