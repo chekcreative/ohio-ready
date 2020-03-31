@@ -4,7 +4,7 @@ import {makeStyles} from "@material-ui/core/styles";
 import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import {connect} from "react-redux";
-import {setDateFromDisplay} from "../../actions/actions";
+import {setDateFromCalendar} from "../../actions/actions";
 
 const useStyles = makeStyles(() => ({
   calendarIconWrapper: {
@@ -68,7 +68,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     onDateSelection: (dateString) => {
-      dispatch(setDateFromDisplay(dateString))
+      dispatch(setDateFromCalendar(dateString))
     }
   }
 }
