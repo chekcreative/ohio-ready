@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../actions/actions";
 import {connect} from "react-redux";
 import {sampleIncluded, sampleNewsObjects} from "../sampleData/singleObject";
+import {triggeringAgents} from "../reducers/reducer";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -151,9 +152,13 @@ function NewsWrapper(props) {
   };
 
   const updateViewDate = () => {
-    const publishedDate = getPublishDateOfFirstVisibleNewsItem();
-    if (publishedDate) {
-      props.onScrollDateChange(publishedDate.toISOString());
+    if (props.triggeringAgent === triggeringAgents.NEWS_LIST) {
+      const publishedDate = getPublishDateOfFirstVisibleNewsItem();
+      if (publishedDate) {
+        props.onScrollDateChange(publishedDate.toISOString());
+      }
+    } else {
+      props.onScrollDateChange(props.viewDate);
     }
   };
 
@@ -193,7 +198,8 @@ function NewsWrapper(props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: state.viewDate
+    viewDate: state.viewDate,
+    triggeringAgent: state.triggeringAgent
   }
 }
 
