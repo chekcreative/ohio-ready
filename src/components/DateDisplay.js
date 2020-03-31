@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from "react-redux";
 import {setDateFromDisplay} from "../actions/actions";
-import {generateDateDisplayOptions, today} from "../utils/dateDisplayOptions";
+import dateDisplayOptions from "../utils/dateDisplayOptions";
 
 // styling
 import clsx from 'clsx';
@@ -51,7 +51,7 @@ function DateDisplay({viewDate, onDateSelection}) {
 
   // TODO: Determine date range based on results from the API
   const earliestDate = new Date(2020, 0, 1);
-  const dateOptions = generateDateDisplayOptions(today(), earliestDate);
+  const dateOptions = dateDisplayOptions(earliestDate);
 
   const isActiveDateOption = (i) => {
     return dateOptions[i+1]
@@ -81,7 +81,7 @@ function DateDisplay({viewDate, onDateSelection}) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: new Date(state.viewDate)
+    viewDate: new Date(state.viewDateString)
   }
 }
 

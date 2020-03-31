@@ -18,6 +18,7 @@ import NewsItem from './NewsItem'
 // utils
 import axios from 'axios';
 import axiosHeader from '../utils/axiosHeader'
+import {publishedDate} from "../utils/dateHelpers";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -57,24 +58,22 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// to get proper dates
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 function NewsWrapper(props) {
 
   // config state
   const classes = useStyles();
-  const [newsObjects, setNewsObjects] = useState([]);
-  const [included, setIncluded] = useState([]);
+  const [newsObjects, setNewsObjects] = useState(sampleNewsObjects);
+  const [included, setIncluded] = useState(sampleIncluded);
 
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
-  const [morePagesAvailable, setMorePagesAvailable] = useState(true);
+  const [morePagesAvailable, setMorePagesAvailable] = useState(false);
   const [morePagesNeeded, setMorePagesNeeded] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   const NEWS_ITEM_NAME = "newsItem";
 
   useEffect(() => {
-    const viewDate = new Date(props.viewDate);
+    const viewDate = new Date(props.viewDateString);
 
     const earliestFetchedPublishDate = getEarliestFetchedPublishDate();
     if (viewDate < earliestFetchedPublishDate){
@@ -93,7 +92,7 @@ function NewsWrapper(props) {
         window.scrollTo(0, scrollPosition)
       }
     }
-  }, [props.viewDate, newsObjects]);
+  }, [props.viewDateString, newsObjects]);
 
 
   const loadEvents = () => {
@@ -128,7 +127,7 @@ function NewsWrapper(props) {
 
   const getEarliestFetchedPublishDate = () => {
     return newsObjects.length
-      ? new Date(newsObjects[newsObjects.length-1].attributes.published_on)
+      ? publishedDate(newsObjects[newsObjects.length-1])
       : new Date();
   };
 
@@ -165,7 +164,7 @@ function NewsWrapper(props) {
         props.onScrollDateChange(publishedDate.toISOString());
       }
     } else {
-      props.onScrollDateChange(props.viewDate);
+      props.onScrollDateChange(props.viewDateString);
     }
   };
 
@@ -205,7 +204,8 @@ function NewsWrapper(props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: state.viewDate,
+    viewDate: new Date(state.viewDateString),
+    viewDateString: state.viewDateString,
     triggeringAgent: state.triggeringAgent
   }
 }
