@@ -14,9 +14,14 @@ import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
 
 // our custom breakpoints for MATERIAL-UI
 const breakpoints = createBreakpoints({})
-breakpoints.values.sm = 720
+breakpoints.values.sm = 720;
 const theme = createMuiTheme({
-  breakpoints: breakpoints
+  breakpoints: breakpoints,
+  palette: {
+    primary: {
+      main: '#4B00FF'
+    },
+  }
 });
 
 // redux store
