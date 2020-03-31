@@ -203,7 +203,6 @@ function NewsWrapper(props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: new Date(state.viewDateString),
     viewDateString: state.viewDateString,
     triggeringAgent: state.triggeringAgent
   }
