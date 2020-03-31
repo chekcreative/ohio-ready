@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 
 // redux
 import {connect} from "react-redux";
-import {setDateFromDisplay} from "../../actions/actions";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,11 +13,11 @@ import Card from '@material-ui/core/Card';
 import Statistics from './Statistics'
 import OhioMap from './OhioMap'
 import InfectionCurve from './InfectionCurve'
+import CalendarPicker from "./CalendarPicker";
 import FooterIcons from './FooterIcons'
 
 // icons
 import logo from '../../icons/ohio_ready_icon.svg'
-import calendar from '../../icons/cal_white.svg'
 
 // utils
 import generateDateString from '../../utils/generateDateString'
@@ -204,9 +203,7 @@ function Sidebar(props) {
                 <h2 className={classes.sidebarSubTitle}>A Timeline of COVID-19</h2>
               </div>
             </div>
-            <div className={classes.calendarIconWrapper}>
-              <img src={calendar} alt=""/>
-            </div>
+            <CalendarPicker/>
           </div>
 
           <hr className={classes.sidebarHR}/>
@@ -246,9 +243,4 @@ function mapStateToProps(state) {
   }
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Sidebar)
+export default connect(mapStateToProps, null)(Sidebar)

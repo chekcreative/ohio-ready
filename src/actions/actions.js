@@ -1,5 +1,6 @@
 export const SET_DATE_FROM_DISPLAY = "SET_DATE_FROM_DISPLAY";
 export const SET_DATE_FROM_SCROLL = "SET_DATE_FROM_SCROLL";
+export const SET_DATE_FROM_CALENDAR = "SET_DATE_FROM_CALENDAR";
 
 
 export function setDateFromDisplay(viewDate) {
@@ -12,6 +13,13 @@ export function setDateFromDisplay(viewDate) {
 export function setDateFromScroll(viewDate) {
     return {
         type: SET_DATE_FROM_SCROLL,
+        viewDate: viewDate
+    };
+}
+
+export function setDateFromCalendar(viewDate) {
+    return {
+        type: SET_DATE_FROM_CALENDAR,
         viewDate: viewDate
     };
 }

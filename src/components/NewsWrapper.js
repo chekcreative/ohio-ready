@@ -70,8 +70,10 @@ function NewsWrapper(props) {
 
     const earliestFetchedPublishDate = getEarliestFetchedPublishDate();
     if (viewDate < earliestFetchedPublishDate){
-      newsObjects.length && setMorePagesNeeded(true);
-      loadEvents()
+      if (morePagesAvailable) {
+        newsObjects.length && setMorePagesNeeded(true);
+        loadEvents()
+      }
     } else {
       setMorePagesNeeded(false);
       const publishDateOfFirstVisible = getPublishDateOfFirstVisibleNewsItem();
