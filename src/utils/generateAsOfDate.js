@@ -2,14 +2,14 @@
 export default function (dateToGen) {
   const publishedDate = new Date(dateToGen)
 
-  const dateYear = publishedDate.getFullYear()
+  const dateYear = publishedDate.getUTCFullYear()
 
-  let dateMonth = publishedDate.getMonth() + 1
+  let dateMonth = publishedDate.getUTCMonth() + 1
   if (dateMonth.toString().length === 1) {
     dateMonth = `0${dateMonth }`
   }
 
-  let dateDate = publishedDate.getDate()
+  let dateDate = publishedDate.getUTCDate()
   if (dateDate.toString().length === 1) {
     dateDate = `0${dateDate }`
   }

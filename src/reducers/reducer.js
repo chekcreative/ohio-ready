@@ -1,5 +1,4 @@
 import {SET_DATE_FROM_CALENDAR, SET_DATE_FROM_DISPLAY, SET_DATE_FROM_SCROLL} from "../actions/actions";
-import {today} from "../utils/dateDisplayOptions";
 
 export const triggeringAgents = {
     DATE_DISPLAY: 'DATE_DISPLAY',
@@ -8,24 +7,24 @@ export const triggeringAgents = {
 };
 
 const initialState = {
-    viewDate: today().toISOString()
+    viewDateString: new Date().toISOString()
 };
 
 export default function rootReducer(state = initialState, action) {
     switch (action.type) {
         case SET_DATE_FROM_DISPLAY:
             return Object.assign({}, state, {
-                viewDate: action.viewDate,
+                viewDateString: action.viewDateString,
                 triggeringAgent: triggeringAgents.DATE_DISPLAY
             });
         case SET_DATE_FROM_SCROLL:
             return Object.assign({}, state, {
-                viewDate: action.viewDate,
+                viewDateString: action.viewDateString,
                 triggeringAgent: triggeringAgents.NEWS_LIST
             });
         case SET_DATE_FROM_CALENDAR:
             return Object.assign({}, state, {
-                viewDate: action.viewDate,
+                viewDateString: action.viewDateString,
                 triggeringAgent: triggeringAgents.CALENDAR_PICKER
             });
         default:

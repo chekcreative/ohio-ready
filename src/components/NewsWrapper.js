@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../actions/actions";
 import {connect} from "react-redux";
-import {sampleIncluded, sampleNewsObjects} from "../sampleData/apiData_20200329";
 import {triggeringAgents} from "../reducers/reducer";
 
 // styling
@@ -18,6 +17,7 @@ import NewsItem from './NewsItem'
 // utils
 import axios from 'axios';
 import axiosHeader from '../utils/axiosHeader'
+import {publishedDate} from "../utils/dateHelpers";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -57,8 +57,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-// to get proper dates
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 function NewsWrapper(props) {
 
@@ -74,7 +72,7 @@ function NewsWrapper(props) {
   const NEWS_ITEM_NAME = "newsItem";
 
   useEffect(() => {
-    const viewDate = new Date(props.viewDate);
+    const viewDate = new Date(props.viewDateString);
 
     const earliestFetchedPublishDate = getEarliestFetchedPublishDate();
     if (viewDate < earliestFetchedPublishDate){
@@ -93,7 +91,7 @@ function NewsWrapper(props) {
         window.scrollTo(0, scrollPosition)
       }
     }
-  }, [props.viewDate, newsObjects]);
+  }, [props.viewDateString, newsObjects]);
 
 
   const loadEvents = () => {
@@ -128,7 +126,7 @@ function NewsWrapper(props) {
 
   const getEarliestFetchedPublishDate = () => {
     return newsObjects.length
-      ? new Date(newsObjects[newsObjects.length-1].attributes.published_on)
+      ? publishedDate(newsObjects[newsObjects.length-1])
       : new Date();
   };
 
@@ -165,7 +163,7 @@ function NewsWrapper(props) {
         props.onScrollDateChange(publishedDate.toISOString());
       }
     } else {
-      props.onScrollDateChange(props.viewDate);
+      props.onScrollDateChange(props.viewDateString);
     }
   };
 
@@ -205,7 +203,7 @@ function NewsWrapper(props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: state.viewDate,
+    viewDateString: state.viewDateString,
     triggeringAgent: state.triggeringAgent
   }
 }
