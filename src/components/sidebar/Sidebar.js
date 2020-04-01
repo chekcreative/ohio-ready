@@ -128,12 +128,12 @@ function Sidebar(props) {
   const [totalRecovered, updateTotalRecovered] = useState('-')
   const [totalDeaths, updateTotalDeaths] = useState('-')
 
-  let dateString = generateDateString(props.viewDate, false)
+  let dateString = generateDateString(props.viewDateString, false)
 
   useEffect(() => {
-    dateString = generateDateString(props.viewDate, false)
-    getCaseData(props.viewDate)
-  }, [props.viewDate])
+    dateString = generateDateString(props.viewDateString, false)
+    getCaseData(props.viewDateString)
+  }, [props.viewDateString])
 
   useEffect(() => {
     calculateStatTotals()
@@ -247,7 +247,7 @@ function Sidebar(props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: new Date(state.viewDate)
+    viewDateString: state.viewDateString
   }
 }
 

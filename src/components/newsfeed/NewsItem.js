@@ -14,7 +14,8 @@ import globe from '../../icons/globe.svg'
 import link from '../../icons/link.svg'
 
 // utils
-import generateDateString from '../../utils/generateDateString'
+import generateDateString from '../utils/generateDateString'
+import {publishedDate} from "../utils/dateHelpers";
 
 const useStyles = makeStyles((theme) => ({
   newsCard: {

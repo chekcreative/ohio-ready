@@ -3,30 +3,24 @@ export const SET_DATE_FROM_SCROLL = "SET_DATE_FROM_SCROLL";
 export const SET_DATE_FROM_CALENDAR = "SET_DATE_FROM_CALENDAR";
 
 
-export function setDateFromDisplay(viewDate) {
-  console.log("setting date from display")
-  console.log("====================")
+export function setDateFromDisplay(viewDateString) {
     return {
         type: SET_DATE_FROM_DISPLAY,
-        viewDate: viewDate
+        viewDateString: viewDateString
     };
 }
 
-export function setDateFromScroll(viewDate) {
-  console.log("setting date from scroll")
-  console.log("====================")
+export function setDateFromScroll(viewDateString) {
     return {
         type: SET_DATE_FROM_SCROLL,
-        viewDate: viewDate
+        viewDateString: viewDateString
     };
 }
 
-export function setDateFromCalendar(viewDate) {
-  console.log("setting date from calendar")
-  console.log("====================")
+export function setDateFromCalendar(viewDateString) {
     return {
         type: SET_DATE_FROM_CALENDAR,
-        viewDate: viewDate
+        viewDateString: viewDateString
     };
 }
 

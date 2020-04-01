@@ -5,6 +5,7 @@ import {DatePicker, MuiPickersUtilsProvider} from "@material-ui/pickers";
 import MomentUtils from "@date-io/moment";
 import {connect} from "react-redux";
 import {setDateFromCalendar} from "../../actions/actions";
+import moment from 'moment-timezone';
 
 const useStyles = makeStyles(() => ({
   calendarIconWrapper: {
@@ -26,8 +27,12 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
+
+moment.tz.setDefault("GMT");
+
+
 function CalendarPicker (props) {
-  const viewDate = new Date(props.viewDate);
+  const viewDate = new Date(props.viewDateString);
   const classes = useStyles();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -38,7 +43,7 @@ function CalendarPicker (props) {
         alt="Choose Date"
         className={classes.calendarIcon}
         onClick={() => {setIsOpen(true)}}/>
-      <MuiPickersUtilsProvider utils={MomentUtils}>
+      <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
         <DatePicker
           autoOk
           open={isOpen}
@@ -48,7 +53,6 @@ function CalendarPicker (props) {
           value={viewDate}
           disableToolbar={false}
           onChange={(date) => {
-            console.log('hey!');
             props.onDateSelection(date.toISOString())
           }}
           style={{display: "none"}}
@@ -61,7 +65,7 @@ function CalendarPicker (props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: state.viewDate
+    viewDateString: state.viewDateString
   }
 }
 

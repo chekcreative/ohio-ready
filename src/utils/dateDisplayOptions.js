@@ -1,3 +1,5 @@
+import * as moment from "moment";
+
 const monthDisplayNames = [
     "JAN",
     "FEB",
@@ -13,16 +15,11 @@ const monthDisplayNames = [
     "DEC"
 ];
 
-export function today() {
-    let dt = new Date();
-    return new Date(dt.getFullYear(), dt.getMonth(), dt.getDate())
-}
-
 function allMonthsLeadingUpTo(currentMonth, currentYear) {
     return [...Array(currentMonth)].map((_, ix) => {
         return {
             display: monthDisplayNames[currentMonth - ix - 1],
-            dateString: new Date(currentYear, currentMonth - ix, 1).toISOString()
+            dateString: moment.utc([currentYear, currentMonth - ix - 1]).endOf('month').toISOString()
         }
     });
 }
@@ -31,7 +28,7 @@ function allYearsBetween(earliestYear, currentYear) {
     return [...Array(currentYear - earliestYear)].map((_, ix) => {
         return {
             display: (currentYear - ix - 1).toString(),
-            dateString: new Date(currentYear - ix, 0, 1).toISOString()
+            dateString: moment.utc([currentYear - ix - 1]).endOf('year').toISOString()
         }
     });
 }
@@ -40,17 +37,17 @@ function allMonthsBetween(earliestMonth, currentMonth, currentYear) {
     return [...Array(currentMonth - earliestMonth)].map((_, ix) => {
         return {
             display: monthDisplayNames[currentMonth - ix - 1],
-            dateString: new Date(currentYear, currentMonth - ix, 1).toISOString()
+            dateString: moment.utc([currentYear, currentMonth - ix - 1]).endOf('month').toISOString()
         }
     });
 }
 
 export function generateDateDisplayOptions(currentDate, earliestDate) {
-    let currentYear = currentDate.getFullYear();
-    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getUTCFullYear();
+    let currentMonth = currentDate.getUTCMonth();
 
-    let earliestYear = earliestDate.getFullYear();
-    let earliestMonth = earliestDate.getMonth();
+    let earliestYear = earliestDate.getUTCFullYear();
+    let earliestMonth = earliestDate.getUTCMonth();
 
     let earlierMonths = [];
     let earlierYears = [];
@@ -70,4 +67,9 @@ export function generateDateDisplayOptions(currentDate, earliestDate) {
         ...earlierMonths,
         ...earlierYears,
     ];
+}
+
+export default function dateDisplayOptions(earliestDate) {
+    const today = moment().utc().endOf('day').toDate();
+    return generateDateDisplayOptions(today, earliestDate);
 }
