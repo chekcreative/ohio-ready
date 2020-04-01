@@ -14,8 +14,8 @@ import globe from '../../icons/globe.svg'
 import link from '../../icons/link.svg'
 
 // utils
-import generateDateString from '../utils/generateDateString'
-import {publishedDate} from "../utils/dateHelpers";
+import generateDateString from '../../utils/generateDateString'
+import {publishedDate} from "../../utils/dateHelpers";
 
 const useStyles = makeStyles((theme) => ({
   newsCard: {
@@ -77,9 +77,6 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column'
   }
 }));
-
-// to get correct date to display
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 const NewsItem = (props) => {
   const classes = useStyles();

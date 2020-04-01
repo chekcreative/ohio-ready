@@ -18,7 +18,7 @@ export function setDateFromScroll(viewDateString) {
 }
 
 export function setDateFromCalendar(viewDateString) {
-    return {
+     return {
         type: SET_DATE_FROM_CALENDAR,
         viewDateString: viewDateString
     };

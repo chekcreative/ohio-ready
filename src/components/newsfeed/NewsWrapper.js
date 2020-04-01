@@ -79,10 +79,10 @@ function NewsWrapper(props) {
   const NEWS_ITEM_NAME = "newsItem";
 
   useEffect(() => {
-    const viewDate = new Date(props.viewDate);
+    const viewDateString = new Date(props.viewDateString);
 
     const earliestFetchedPublishDate = getEarliestFetchedPublishDate();
-    if (viewDate < earliestFetchedPublishDate){
+    if (viewDateString < earliestFetchedPublishDate){
       if (morePagesAvailable) {
         newsObjects.length && setMorePagesNeeded(true);
         loadEvents()
@@ -92,13 +92,13 @@ function NewsWrapper(props) {
       const publishDateOfFirstVisible = getPublishDateOfFirstVisibleNewsItem();
       if (
         publishDateOfFirstVisible &&
-        (viewDate < publishDateOfFirstVisible || viewDate > publishDateOfFirstVisible)
+        (viewDateString < publishDateOfFirstVisible || viewDateString > publishDateOfFirstVisible)
       ) {
-        const scrollPosition = getPositionOfFirstNewsItemPublishedBefore(viewDate);
+        const scrollPosition = getPositionOfFirstNewsItemPublishedBefore(viewDateString);
         window.scrollTo(0, scrollPosition)
       }
     }
-  }, [props.viewDate, newsObjects]);
+  }, [props.viewDateString, newsObjects]);
 
   const loadEvents = () => {
     setIsFetching(true);
@@ -130,51 +130,8 @@ function NewsWrapper(props) {
     }
   };
 
-  const loadEventsWithFilter = () => {
-    setIsFetching(true);
-
-    let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`
-    if (authorizerNameFilter) {
-      let encodedAuthName = encodeURI(authorizerNameFilter)
-      requestString += `&authorizer__name=${encodedAuthName}`
-    }
-
-    console.log("Making request to: ")
-    console.log(requestString)
-
-    if (morePagesAvailable) {
-      axios.get(requestString, axiosHeader)
-        .then(
-          (res) => {
-            if (res.data.data) {
-              setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data);
-            }
-            if (res.data.included) {
-              setIncluded(numberPagesLoaded ? included.concat(res.data.included) : res.data.included)
-            }
-            if (res.data.meta?.pagination?.pages) {
-              setMorePagesAvailable(res.data.meta.pagination.pages > (numberPagesLoaded + 1))
-            }
-            setNumberPagesLoaded(numberPagesLoaded+1);
-          }
-        )
-        .catch(
-          (err) => {
-            console.log(err);
-          }
-        )
-        .then(() => {
-            setIsFetching(false);
-          }
-        )
-    }
-  }
-
   const toggleAuthorizerNameFilter = (authorizer_name) => {
     setAuthorizerNameFilter(authorizer_name)
-    if (authorizer_name === null) {
-      loadEvents(true)
-    }
   }
 
   const toggleScopeFilter = (scope) => {
@@ -230,7 +187,7 @@ function NewsWrapper(props) {
         props.onScrollDateChange(publishedDate.toISOString());
       }
     } else {
-      props.onScrollDateChange(props.viewDate);
+      props.onScrollDateChange(props.viewDateString);
     }
   };
 
@@ -286,7 +243,7 @@ function NewsWrapper(props) {
 
 function mapStateToProps(state) {
   return {
-    viewDate: state.viewDate,
+    viewDateString: state.viewDateString,
     triggeringAgent: state.triggeringAgent
   }
 }
