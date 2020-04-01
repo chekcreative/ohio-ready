@@ -45,6 +45,10 @@ function CalendarPicker (props) {
         onClick={() => {setIsOpen(true)}}/>
       <MuiPickersUtilsProvider utils={MomentUtils} moment={moment}>
         <DatePicker
+          minDate={new Date('2020-01-20')}
+          minDateMessage={'Data begins on Jan 20'}
+          maxDate={new Date()}
+          maxDateMessage={'We don\'t have data past today.'}
           autoOk
           open={isOpen}
           onOpen={() => setIsOpen(true)}
