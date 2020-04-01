@@ -9,13 +9,13 @@ import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
 
 // icons 
-import share from '../icons/share.svg'
-import globe from '../icons/globe.svg'
-import link from '../icons/link.svg'
+import share from '../../icons/share.svg'
+import globe from '../../icons/globe.svg'
+import link from '../../icons/link.svg'
 
 // utils
-import generateDateString from '../utils/generateDateString'
-import {publishedDate} from "../utils/dateHelpers";
+import generateDateString from '../../utils/generateDateString'
+import {publishedDate} from "../../utils/dateHelpers";
 
 const useStyles = makeStyles((theme) => ({
   newsCard: {
@@ -78,7 +78,6 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-
 const NewsItem = (props) => {
   const classes = useStyles();
 
@@ -113,7 +112,8 @@ const NewsItem = (props) => {
               authorizer && 
               authorizer.attributes.name ?
               <Grid item>
-                <Chip 
+                <Chip
+                  onClick={() => props.toggleAuthorizerNameFilter(authorizer.attributes.name)}
                   label={ 
                     authorizer.attributes.name
                   }></Chip>
@@ -123,7 +123,9 @@ const NewsItem = (props) => {
             {
               props.newsObject.attributes.scope ?
               <Grid item>
-                <Chip label={ props.newsObject.attributes.scope }></Chip>
+                <Chip 
+                  onClick={() => props.toggleScopeFilter(props.newsObject.attributes.scope)}
+                  label={ props.newsObject.attributes.scope }></Chip>
               </Grid> :
               null
             }
@@ -134,7 +136,9 @@ const NewsItem = (props) => {
                   tag.attributes &&
                   tag.attributes.name ?
                   <Grid item key={'tagChip' + i}>
-                    <Chip label={ tag.attributes.name }></Chip>
+                    <Chip 
+                      onClick={() => props.toggleTagFilter(tag.attributes.name)}
+                      label={ tag.attributes.name }></Chip>
                   </Grid> :
                   null
                 ) :

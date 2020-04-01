@@ -8,7 +8,7 @@ import Container from '@material-ui/core/Container';
 
 // custom components
 import Sidebar from './components/sidebar/Sidebar'
-import NewsWrapper from './components/NewsWrapper'
+import NewsWrapper from './components/newsfeed/NewsWrapper'
 import DateDisplay from './components/DateDisplay'
 
 const useStyles = makeStyles((theme) => ({

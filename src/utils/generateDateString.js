@@ -23,6 +23,5 @@ export default function (dateToGen, displayYearBool) {
   if (displayYearBool) {
     dateString += `, ${dateYear}`
   }
-
   return dateString
 }
