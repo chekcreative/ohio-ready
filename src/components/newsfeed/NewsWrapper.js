@@ -105,6 +105,7 @@ function NewsWrapper(props) {
         .then(
           (res) => {
             if (res.data.data) {
+              setNumberPagesLoaded(numberPagesLoaded+1);
               setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data);
             }
             if (res.data.included) {
@@ -113,7 +114,6 @@ function NewsWrapper(props) {
             if (res.data.meta?.pagination?.pages) {
               setMorePagesAvailable(res.data.meta.pagination.pages > (numberPagesLoaded + 1))
             }
-            setNumberPagesLoaded(numberPagesLoaded+1);
           }
         )
         .catch(
