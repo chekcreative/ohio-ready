@@ -20,6 +20,7 @@ import ActiveFilters from './ActiveFilters'
 // utils
 import axios from 'axios';
 import axiosHeader from '../../utils/axiosHeader'
+import {publishedDate} from "../../utils/dateHelpers";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -58,9 +59,6 @@ const useStyles = makeStyles((theme) => ({
     top: '0',
   }
 }));
-
-// to get proper dates
-const publishedDate = (newsObject) => new Date(newsObject.attributes.published_on);
 
 function NewsWrapper(props) {
 
