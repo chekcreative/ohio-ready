@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -75,6 +75,10 @@ const useStyles = makeStyles((theme) => ({
   innerSourceWrapper: {
     display: 'flex',
     flexDirection: 'column'
+  },
+  activeFilterChip: {
+    backgroundColor: '#121212',
+    color: 'rgba(255,255,255,0.87)'
   }
 }));
 
@@ -100,6 +104,16 @@ const NewsItem = (props) => {
   // format date string
   const dateString = generateDateString(publishedDate(props.newsObject), true)
 
+  const checkTagFilterForName = (tagName) => {
+    var isIncluded = false
+    props.tagFilter.forEach( (tagFilterItem) => {
+      if (tagFilterItem.name === tagName) {
+        isIncluded = true
+      }
+    })
+    return isIncluded
+  }
+
   return (
     <Card className={classes.newsCard}>
 
@@ -113,6 +127,7 @@ const NewsItem = (props) => {
               authorizer.attributes.name ?
               <Grid item>
                 <Chip
+                  className={props.authorizerNameFilter === authorizer.attributes.name ? classes.activeFilterChip : null}
                   onClick={() => props.toggleAuthorizerNameFilter(authorizer.attributes.name)}
                   label={ 
                     authorizer.attributes.name
@@ -123,7 +138,8 @@ const NewsItem = (props) => {
             {
               props.newsObject.attributes.scope ?
               <Grid item>
-                <Chip 
+                <Chip
+                  className={props.scopeFilter === props.newsObject.attributes.scope ? classes.activeFilterChip : null}
                   onClick={() => props.toggleScopeFilter(props.newsObject.attributes.scope)}
                   label={ props.newsObject.attributes.scope }></Chip>
               </Grid> :
@@ -137,6 +153,7 @@ const NewsItem = (props) => {
                   tag.attributes.name ?
                   <Grid item key={'tagChip' + i}>
                     <Chip 
+                      className={checkTagFilterForName(tag.attributes.name) ? classes.activeFilterChip : null}
                       onClick={() => props.toggleTagFilter({name: tag.attributes.name, id: tag.id})}
                       label={ tag.attributes.name }></Chip>
                   </Grid> :
