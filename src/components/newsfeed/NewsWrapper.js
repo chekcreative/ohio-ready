@@ -41,22 +41,25 @@ const useStyles = makeStyles((theme) => ({
     position: 'static',
   },
   loadingCover: {
-    position: 'absolute',
-    height: '100%',
-    zIndex: 10,
+    position: 'fixed',
+    height: '100vh',
+    width: '100vw',
+    zIndex: 100,
     backgroundColor: 'hsla(0, 0%, 35%, 0.9)',
     top: '0',
-    left: '16px',
-    right: '16px'
+    left: '0'
   },
   loadingText: {
-    paddingTop: '150px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     fontSize: '24px',
+    top: '50%',
+    transform: 'translateY(-50%)',
     color: '#fff',
     textAlign: 'center',
     fontWeight: 'bold',
-    position: 'sticky',
-    top: '0',
+    position: 'relative'
   }
 }));
 
@@ -311,7 +314,10 @@ function NewsWrapper(props) {
       {
         morePagesNeeded &&
         <div className={classes.loadingCover}>
-          <h1 className={classes.loadingText}>LOADING...</h1>
+          <h1 className={classes.loadingText}>
+            <div class="lds-circle"><div></div></div>
+            LOADING...
+          </h1>
         </div>
       }
     </Grid>
