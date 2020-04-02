@@ -54,10 +54,10 @@ function StickyFooter() {
   return (
     <div className={classes.stickyFooterWrapper}>
       <div className={classes.footerTextWrapperDesktop}>
-        made with 💜 by <a href="#" className={classes.footerTextLink}>volunteers</a> as part of <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a> in Columbus, Ohio
+        made with 💜 by <a href="https://github.com/chekcreative/ohio-ready/graphs/contributors" className={classes.footerTextLink}>volunteers</a> as part of <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a> in Columbus, Ohio
       </div>
       <div className={classes.footerTextWrapperMobile}>
-        w/ 💜 by <a href="#" className={classes.footerTextLink}>us</a> for <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a>
+        w/ 💜 by <a href="https://github.com/chekcreative/ohio-ready/graphs/contributors" className={classes.footerTextLink}>us</a> for <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a>
       </div>
     </div>
   );

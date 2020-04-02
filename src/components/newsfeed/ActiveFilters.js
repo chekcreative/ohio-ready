@@ -10,9 +10,10 @@ import Chip from '@material-ui/core/Chip';
 const useStyles = makeStyles((theme) => ({
   activeFilterChip: {
     backgroundColor: '#121212',
-    color: '#fff'
+    color: '#fff !important'
   }
 }));
+
 
 function ActiveFilters(props) {
   const classes = useStyles();
