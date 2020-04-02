@@ -315,7 +315,7 @@ function NewsWrapper(props) {
         morePagesNeeded &&
         <div className={classes.loadingCover}>
           <h1 className={classes.loadingText}>
-            <div class="lds-circle"><div></div></div>
+            <div class="lds-ripple"><div></div><div></div></div>
             LOADING...
           </h1>
         </div>
