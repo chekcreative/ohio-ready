@@ -78,7 +78,7 @@ const useStyles = makeStyles((theme) => ({
   },
   activeFilterChip: {
     backgroundColor: '#121212',
-    color: 'rgba(255,255,255,0.87)'
+    color: '#fff'
   }
 }));
 
