@@ -34,14 +34,16 @@ const useStyles = makeStyles((theme) => ({
       width: '100vw',
       position: 'fixed',
       top: '0px',
-      left: '0px'
+      left: '0px',
+      zIndex: '100'
     }
   },
   sidebarCard: {
     padding: '16px',
     width: '100%',
     [theme.breakpoints.down('xs')]: {
-      borderRadius: '0px'
+      borderRadius: '0px',
+      padding: '8px',
     }
   },
   sidebarCardHeader: {

@@ -33,8 +33,7 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: 'calc(100%)',
       margin: 'auto',
       padding: '0px 8px',
-      position: 'static',
-      paddingTop: '225px' // TODO: this needs to change dynamically if we shrink the header on scroll, but its static for now
+      position: 'static'
     } 
   },
   showMoreButton: {

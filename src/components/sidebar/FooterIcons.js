@@ -14,17 +14,19 @@ const useStyles = makeStyles((theme) => ({
   cardFooterIconWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
+    margin: '0px',
     justifyContent: 'center',
     alignItems: 'center',
-    margin: '14px 0px 0px 0px',
     maxWidth: '100%',
   },
   cardFooterIcon: {
     marginRight: '10px',
     marginLeft: '10px',
-    marginBottom: '14px',
-  },
-  
+    marginTop: '14px',
+    [theme.breakpoints.down('xs')]: {
+      marginTop: '6px'
+    }
+  } 
 }));
 
 function FooterIcons() {

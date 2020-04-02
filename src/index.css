@@ -7,6 +7,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* accounts for the mobile sidebar */
+/* TODO: this might end up needing to be dynamic if the bar ends up shrinking on scroll */
+@media screen and (max-width: 719.9px) {
+  body {
+    padding-top: 160px;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
