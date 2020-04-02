@@ -61,3 +61,8 @@ a:hover {
 .ohio_map_county:hover {
   fill: #4B00FF;
 }
+
+/* overriding material-ui the cheap and easy way */
+.MuiChip-deleteIcon {
+  color: #757575 !important;
+}
