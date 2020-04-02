@@ -137,7 +137,7 @@ const NewsItem = (props) => {
                   tag.attributes.name ?
                   <Grid item key={'tagChip' + i}>
                     <Chip 
-                      onClick={() => props.toggleTagFilter(tag.attributes.name)}
+                      onClick={() => props.toggleTagFilter({name: tag.attributes.name, id: tag.id})}
                       label={ tag.attributes.name }></Chip>
                   </Grid> :
                   null
