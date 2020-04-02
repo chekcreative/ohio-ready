@@ -26,12 +26,13 @@ const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
     flexShrink: '1', 
     flexGrow: '1', 
-    padding: '0px 16px',
+    padding: '0px 16px 0px 16px',
     position: 'relative',
     maxWidth: 'calc(100% - 243px - 15px - 68px - 15px)',
+    marginBottom: '50px',
     [theme.breakpoints.down('xs')]: {
       maxWidth: 'calc(100%)',
-      margin: 'auto',
+      margin: '0px auto 50px auto',
       padding: '0px 8px',
       position: 'static'
     } 

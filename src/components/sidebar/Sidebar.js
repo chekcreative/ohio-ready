@@ -117,7 +117,7 @@ const useStyles = makeStyles((theme) => ({
   },
   stickyTop: {
     position: 'sticky',
-    top: '10px',
+    top: '32px',
   }
 }));
 
