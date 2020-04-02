@@ -14,7 +14,7 @@ function ActiveFilters(props) {
   const classes = useStyles();
 
   useEffect(() => {
-    console.log(props)
+    // console.log(props)
   })
 
   return (
@@ -42,7 +42,7 @@ function ActiveFilters(props) {
         props.tagFilter.map((tag, i) =>
           <Grid item key={'tagFilter' + i}>
             <Chip 
-              label={tag}
+              label={tag.name}
               onDelete={() => props.toggleTagFilter(tag)} ></Chip>
           </Grid>
         ):

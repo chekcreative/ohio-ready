@@ -98,10 +98,37 @@ function NewsWrapper(props) {
     }
   }, [props.viewDateString, newsObjects]);
 
+  useEffect(() => {
+    if (authorizerNameFilter === null && scopeFilter === null && tagFilter.length === 0) {
+      setNumberPagesLoaded(0)
+      setNewsObjects([])
+      setMorePagesAvailable(true)
+    }
+    loadEvents()
+  }, [authorizerNameFilter, scopeFilter, tagFilter])
+
   const loadEvents = () => {
+    let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`
+
+    if (authorizerNameFilter !== null) {
+      requestString += `&authorizer__name=${encodeURI(authorizerNameFilter)}`
+    }
+
+    if (scopeFilter !== null) {
+      requestString += `&scope=${encodeURI(scopeFilter)}`
+    }
+
+    if (tagFilter.length !== 0) {
+      tagFilter.forEach( (tag) => {
+        requestString += `&tags=${encodeURI(tag.id)}`
+      })
+    }
+
+    console.log(requestString)
+
     setIsFetching(true);
     if (morePagesAvailable) {
-      axios.get(`https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`, axiosHeader)
+      axios.get(requestString, axiosHeader)
         .then(
           (res) => {
             if (res.data.data) {
@@ -114,11 +141,19 @@ function NewsWrapper(props) {
             if (res.data.meta?.pagination?.pages) {
               setMorePagesAvailable(res.data.meta.pagination.pages > (numberPagesLoaded + 1))
             }
+            if (res.status === 404) {
+              setIsFetching(false)
+              setMorePagesAvailable(false)
+              setMorePagesNeeded(false)
+            }
           }
         )
         .catch(
           (err) => {
             console.log(err);
+            setIsFetching(false)
+            setMorePagesAvailable(false)
+            setMorePagesNeeded(false)
           }
         )
         .then(() => {
@@ -129,14 +164,24 @@ function NewsWrapper(props) {
   };
 
   const toggleAuthorizerNameFilter = (authorizer_name) => {
+    setNumberPagesLoaded(0)
+    setNewsObjects([])
+    setMorePagesAvailable(true)
     setAuthorizerNameFilter(authorizer_name)
   }
 
   const toggleScopeFilter = (scope) => {
+    setNumberPagesLoaded(0)
+    setNewsObjects([])
+    setMorePagesAvailable(true)
     setScopeFilter(scope)
   }
 
   const toggleTagFilter = (tag) => {
+    setNumberPagesLoaded(0)
+    setNewsObjects([])
+    setMorePagesAvailable(true)
+
     let currentTagArray = tagFilter
     if (currentTagArray.includes(tag)) {
       currentTagArray = currentTagArray.filter(e => e !== tag)
@@ -226,7 +271,7 @@ function NewsWrapper(props) {
       {
         morePagesAvailable &&
         <Button onClick={loadEvents} className={classes.showMoreButton}>
-          {isFetching ? "LOADING MORE..." : "SHOW MORE"}
+          {isFetching ? "LOADING..." : "SHOW MORE"}
         </Button>
       }
       {
