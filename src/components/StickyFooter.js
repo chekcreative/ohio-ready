@@ -53,10 +53,10 @@ function StickyFooter() {
   return (
     <div className={classes.stickyFooterWrapper}>
       <div className={classes.footerTextWrapperDesktop}>
-        made with 💜 by <a href="https://github.com/chekcreative/ohio-ready/" className={classes.footerTextLink}>volunteers</a> as part of <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a> in Columbus, Ohio
+        made with <span role='img' aria-label='heart emoji'>💜</span> by <a href="https://github.com/chekcreative/ohio-ready/" className={classes.footerTextLink}>volunteers</a> as part of <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a> in Columbus, Ohio
       </div>
       <div className={classes.footerTextWrapperMobile}>
-        w/ 💜 by <a href="https://github.com/chekcreative/ohio-ready/" className={classes.footerTextLink}>us</a> for <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a>
+        w/ <span role='img' aria-label='heart emoji'>💜</span> by <a href="https://github.com/chekcreative/ohio-ready/" className={classes.footerTextLink}>us</a> for <a href="https://cantstopcolumbus.com" className={classes.footerTextLink}>Can't Stop Columbus</a>
       </div>
     </div>
   );

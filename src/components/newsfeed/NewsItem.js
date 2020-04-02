@@ -243,7 +243,7 @@ const NewsItem = (props) => {
               <h6>Coverage</h6>
               {
                 articlesArray.map((articleObject, i) =>
-                  <a href={ articleObject.articleUrl }>
+                  <a href={ articleObject.articleUrl} key={'articleUrl' + i}>
                     { articleObject.publisherName }
                   </a>
                 )

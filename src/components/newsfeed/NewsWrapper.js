@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../../actions/actions";
 import {connect} from "react-redux";
-import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
+// import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
 import {triggeringAgents} from "../../reducers/reducer";
 
 // styling
@@ -313,7 +313,7 @@ function NewsWrapper(props) {
         morePagesNeeded &&
         <div className={classes.loadingCover}>
           <h1 className={classes.loadingText}>
-            <div class="lds-ripple"><div></div><div></div></div>
+            <div className="lds-ripple"><div></div><div></div></div>
             LOADING...
           </h1>
         </div>
