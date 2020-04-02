@@ -143,11 +143,13 @@ function Sidebar(props) {
 
   const getCaseData = (asOfDate) => {
     let as_of_date = generateAsOfDate(asOfDate)
+    console.log(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`)
     axios.get(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`, axiosHeader)
     .then(
       (res) => {
         if (res.status === 200) {
           if (res.data.data) {
+            console.log(res.data.data)
             updateAllCountiesData(res.data.data)
           }
         }
@@ -223,7 +225,9 @@ function Sidebar(props) {
             ></Statistics>
 
           <hr className={clsx(classes.sidebarHR, classes.onlyDesktopSidebarHR)}/>
-          <OhioMap></OhioMap>
+          <OhioMap
+            allCountiesData={allCountiesData}
+            ></OhioMap>
 
           {/* PAUSED FOR NOW - see https://github.com/chekcreative/ohio-ready/issues/7 */}
           {/* <hr className={classes.sidebarHR}/>
