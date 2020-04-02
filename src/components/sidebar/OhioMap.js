@@ -26,8 +26,6 @@ function OhioMap(props) {
     let countyData = props.allCountiesData.find((el) => 
       el.attributes.county === countyName
     )
-    console.log("returning: ")
-    console.log(countyData)
     return countyData
   }
 

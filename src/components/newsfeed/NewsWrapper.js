@@ -132,12 +132,10 @@ function NewsWrapper(props) {
         .then(
           (res) => {
             if (res.data.data) {
-              console.log(res.data.data)
               setNumberPagesLoaded(numberPagesLoaded+1);
               setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data);
             }
             if (res.data.included) {
-              console.log(res.data.included)
               setIncluded(numberPagesLoaded ? included.concat(res.data.included) : res.data.included)
             }
             if (res.data.meta?.pagination?.pages) {
