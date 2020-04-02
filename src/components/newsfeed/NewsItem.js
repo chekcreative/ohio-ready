@@ -185,7 +185,10 @@ const NewsItem = (props) => {
                 null
             }
           </Grid>
-          <img src={share} className={classes.shareIcon}></img>
+          
+          {/* TODO: build this feature - https://github.com/chekcreative/ohio-ready/issues/37 */}
+          {/* <img src={share} className={classes.shareIcon}></img> */}
+
         </div>
       {/* END chips & share icon */}
 
