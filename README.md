@@ -3,6 +3,8 @@
 Built using `create-react-app`. Brought to you by [Can't Stop Columbus](https://cantstopcolumbus.com).
 
 
+[<img src="https://chek.media/0hz" alt="Can't Stop Columbus Logo" width="150"/>](https://cantstopcolumbus.com)
+
 
 ## Contributors
 
