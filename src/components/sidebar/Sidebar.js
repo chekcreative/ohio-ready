@@ -152,9 +152,9 @@ function Sidebar(props) {
             updateAllCountiesData(res.data.data)
           }
           
-          // if there's no data for this date, try the day before, back to jan 20. jan 20 is the earliest date we had any events, in the db
+          // if there's no data for this date, try the day before, back to mar 18. mar 18 is the earliest date we have any official data released from the state of ohio
           if (res.data.data.length === 0) {
-            let dataOrigin = new Date('Mon Jan 20 2020 0:00:00 GMT-0400 (EDT)')
+            let dataOrigin = new Date('Wed Mar 18 2020 0:00:00 GMT-0400 (EDT)')
             var d = new Date(asOfDate);
             d.setDate(d.getDate() - 1);
             if (d >= dataOrigin) {
