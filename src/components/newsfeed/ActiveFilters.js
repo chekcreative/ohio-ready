@@ -8,6 +8,10 @@ import Grid from '@material-ui/core/Grid';
 import Chip from '@material-ui/core/Chip';
 
 const useStyles = makeStyles((theme) => ({
+  activeFilterChip: {
+    backgroundColor: '#121212',
+    color: '#fff'
+  }
 }));
 
 function ActiveFilters(props) {
@@ -23,6 +27,7 @@ function ActiveFilters(props) {
         props.authorizerNameFilter ?
         <Grid item>
           <Chip 
+            className={classes.activeFilterChip}
             label={props.authorizerNameFilter}
             onDelete={() => props.toggleAuthorizerNameFilter(null)} ></Chip> 
         </Grid> :
@@ -32,6 +37,7 @@ function ActiveFilters(props) {
         props.scopeFilter ?
         <Grid item>
           <Chip 
+            className={classes.activeFilterChip}
             label={props.scopeFilter}
             onDelete={() => props.toggleScopeFilter(null)} ></Chip>
         </Grid> :
@@ -42,6 +48,7 @@ function ActiveFilters(props) {
         props.tagFilter.map((tag, i) =>
           <Grid item key={'tagFilter' + i}>
             <Chip 
+              className={classes.activeFilterChip}
               label={tag.name}
               onDelete={() => props.toggleTagFilter(tag)} ></Chip>
           </Grid>

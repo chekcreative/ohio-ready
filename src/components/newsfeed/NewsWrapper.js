@@ -124,7 +124,7 @@ function NewsWrapper(props) {
       })
     }
 
-    console.log(requestString)
+    // console.log(requestString)
 
     setIsFetching(true);
     if (morePagesAvailable) {
@@ -167,24 +167,53 @@ function NewsWrapper(props) {
     setNumberPagesLoaded(0)
     setNewsObjects([])
     setMorePagesAvailable(true)
-    setAuthorizerNameFilter(authorizer_name)
+    if (authorizerNameFilter === authorizer_name) {
+      setAuthorizerNameFilter(null)
+    } else {
+      setAuthorizerNameFilter(authorizer_name)
+    }
   }
 
   const toggleScopeFilter = (scope) => {
     setNumberPagesLoaded(0)
     setNewsObjects([])
     setMorePagesAvailable(true)
-    setScopeFilter(scope)
+    if (scopeFilter === scope) {
+      setScopeFilter(null)
+    } else {
+      setScopeFilter(scope)
+    }
   }
 
-  const toggleTagFilter = (tag) => {
+  const checkTagFilterForName = (tagName) => {
+    var isIncluded = false
+    tagFilter.forEach( (tagFilterItem) => {
+      if (tagFilterItem.name === tagName) {
+        isIncluded = true
+      }
+    })
+    return isIncluded
+  }
+
+  const getIndexOfTag = (tagName) => {
+    var index = -1
+    tagFilter.forEach( (tagFilterItem) => {
+      if (tagFilterItem.name === tagName) {
+        index = tagFilter.indexOf(tagFilterItem)
+      }
+    })
+    return index
+  }
+
+  const toggleTagFilter = (tag) => {    
     setNumberPagesLoaded(0)
     setNewsObjects([])
     setMorePagesAvailable(true)
 
     let currentTagArray = tagFilter
-    if (currentTagArray.includes(tag)) {
-      currentTagArray = currentTagArray.filter(e => e !== tag)
+    if (checkTagFilterForName(tag.name)) {
+      let i = getIndexOfTag(tag.name)
+      currentTagArray.splice(i, 1)
     } else {
       currentTagArray.push(tag)
     }
@@ -262,8 +291,11 @@ function NewsWrapper(props) {
             <NewsItem 
               newsObject={newsObject}
               included={included}
+              authorizerNameFilter={authorizerNameFilter}
               toggleAuthorizerNameFilter={toggleAuthorizerNameFilter}
+              scopeFilter={scopeFilter}
               toggleScopeFilter={toggleScopeFilter}
+              tagFilter={tagFilter}
               toggleTagFilter={toggleTagFilter} />
           </Grid>
         )
