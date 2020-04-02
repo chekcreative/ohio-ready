@@ -232,17 +232,25 @@ const NewsItem = (props) => {
       {/* coverage & source */}
       <div className={classes.coverageSourceWrapper}>
         <div className={classes.coverageWrapper}>
-          <img src={globe} className={classes.coverageSourceIcon}></img>
-          <div className={classes.innerCoverageWrapper}>
-            <h6>Coverage</h6>
-            {
-              articlesArray.map((articleObject, i) =>
-                <a href={ articleObject.articleUrl }>
-                  { articleObject.publisherName }
-                </a>
-              )
-            }
-          </div>
+          {
+            articlesArray.length > 0 ?
+            <img src={globe} className={classes.coverageSourceIcon}></img> :
+            null
+          }
+          {
+            articlesArray.length > 0 ?
+            <div className={classes.innerCoverageWrapper}>
+              <h6>Coverage</h6>
+              {
+                articlesArray.map((articleObject, i) =>
+                  <a href={ articleObject.articleUrl }>
+                    { articleObject.publisherName }
+                  </a>
+                )
+              }
+            </div> :
+            null
+          }
         </div>
         <div className={classes.sourceWrapper}>
           <img src={link} className={classes.coverageSourceIcon}></img>
