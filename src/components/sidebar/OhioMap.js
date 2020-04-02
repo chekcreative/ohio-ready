@@ -6,10 +6,6 @@ import { makeStyles } from '@material-ui/core/styles';
 // material ui components
 import Tooltip from '@material-ui/core/Tooltip';
 
-// other
-import SVG from 'react-inlinesvg';
-import OhioMapSVG from './OhioMap.svg'
-
 const useStyles = makeStyles((theme) => ({
   mapWrapper: {
     padding: '11px 0px',
