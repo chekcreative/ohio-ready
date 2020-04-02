@@ -107,19 +107,19 @@ function NewsWrapper(props) {
   }, [authorizerNameFilter, scopeFilter, tagFilter])
 
   const loadEvents = () => {
-    let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article&page%5Bnumber%5D=${numberPagesLoaded+1}`
+    let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article,article.publisher&page%5Bnumber%5D=${numberPagesLoaded+1}`
 
     if (authorizerNameFilter !== null) {
-      requestString += `&authorizer__name=${encodeURI(authorizerNameFilter)}`
+      requestString += `&authorizer__name=${encodeURIComponent(authorizerNameFilter)}`
     }
 
     if (scopeFilter !== null) {
-      requestString += `&scope=${encodeURI(scopeFilter)}`
+      requestString += `&scope=${encodeURIComponent(scopeFilter)}`
     }
 
     if (tagFilter.length !== 0) {
       tagFilter.forEach( (tag) => {
-        requestString += `&tags=${encodeURI(tag.id)}`
+        requestString += `&tags=${encodeURIComponent(tag.id)}`
       })
     }
 
@@ -131,10 +131,12 @@ function NewsWrapper(props) {
         .then(
           (res) => {
             if (res.data.data) {
+              console.log(res.data.data)
               setNumberPagesLoaded(numberPagesLoaded+1);
               setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data);
             }
             if (res.data.included) {
+              console.log(res.data.included)
               setIncluded(numberPagesLoaded ? included.concat(res.data.included) : res.data.included)
             }
             if (res.data.meta?.pagination?.pages) {

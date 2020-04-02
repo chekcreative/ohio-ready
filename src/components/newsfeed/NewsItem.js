@@ -94,11 +94,34 @@ const NewsItem = (props) => {
   // get each tag name out of the 'included' array from API call 
   const tagsArray = []
   props.newsObject.relationships.tags.data.forEach( (tagObject) => {
-    let matchingTag = props.included.find( (el) =>
+    let matchingTag = props.included.find((el) =>
       el.id == tagObject.id &&
       el.type == tagObject.type
     )
     tagsArray.push(matchingTag)
+  })
+
+  // get articles and publishers out of included
+  const articlesArray = []
+  props.newsObject.relationships.article.data.forEach((article) => {
+    let matchingArticle = null
+    let matchingPublisher = null
+
+    matchingArticle = props.included.find((el) =>
+      el.id == article.id &&
+      el.type == article.type
+    )
+    if (matchingArticle !== null) {
+      matchingPublisher = props.included.find((el) =>
+        el.id == matchingArticle?.relationships.publisher.data.id &&
+        el.type == matchingArticle?.relationships.publisher.data.type
+      )
+    }
+
+    articlesArray.push({
+      publisherName: matchingPublisher?.attributes.name,
+      articleUrl: matchingArticle?.attributes.url
+    })
   })
 
   // format date string
@@ -209,8 +232,13 @@ const NewsItem = (props) => {
           <img src={globe} className={classes.coverageSourceIcon}></img>
           <div className={classes.innerCoverageWrapper}>
             <h6>Coverage</h6>
-            {/* TODO: find out what the data below is structured like, to finish this section */}
-            {/* coverage: relationships.article (array) */}
+            {
+              articlesArray.map((articleObject, i) =>
+                <a href={ articleObject.articleUrl }>
+                  { articleObject.publisherName }
+                </a>
+              )
+            }
           </div>
         </div>
         <div className={classes.sourceWrapper}>
