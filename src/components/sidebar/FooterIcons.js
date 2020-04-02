@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
   cardFooterIconWrapper: {
     display: 'flex',
     flexWrap: 'wrap',
-    margin: '14px 0px 0px 0px',
+    margin: '0px',
     maxWidth: '100%',
     [theme.breakpoints.down('xs')]: {
       justifyContent: 'space-between'
@@ -22,9 +22,10 @@ const useStyles = makeStyles((theme) => ({
   },
   cardFooterIcon: {
     marginRight: '20px',
-    marginBottom: '14px',
+    marginTop: '14px',
     [theme.breakpoints.down('xs')]: {
-      marginRight: '0px'
+      marginRight: '0px',
+      marginTop: '6px'
     }
   },
   

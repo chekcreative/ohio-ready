@@ -16,11 +16,24 @@ const useStyles = makeStyles((theme) => ({
       marginBottom: '0px',
     }
   },
+  statisticsRowDesktop: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
+  },
+  statisticsRowMobile: {
+    [theme.breakpoints.up('sm')]: {
+      display: 'none'
+    }
+  },
   statisticDiv2: {
-    width: '50%'
+    width: '50%',
   },
   statisticDiv3: {
     width: '33%'
+  },
+  statisticDiv4: {
+    width: '25%'
   },
   statisticDivTitle: {
     fontSize: '10px',
@@ -54,7 +67,9 @@ function Statistics(props) {
 
   return (
     <div className={classes.statisticsWrapper}>
-      <div className={classes.statisticsRow}>
+
+      {/* DESKTOP ROW 1 */}
+      <div className={clsx(classes.statisticsRow, classes.statisticsRowDesktop)}>
         <div className={classes.statisticDiv2}>
           <h6 className={classes.statisticDivTitle}>TOTAL INFECTED</h6>
           <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{props.totalInfected}</span>
@@ -64,7 +79,9 @@ function Statistics(props) {
           <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{ dateString }</span>
         </div>
       </div>
-      <div className={classes.statisticsRow}>
+
+      {/* DESKTOP ROW 2 */}
+      <div className={clsx(classes.statisticsRow, classes.statisticsRowDesktop)}>
 
         {/* SICK is in the design, but we are not yet able to get data on it */}
         {/* <div className={classes.statisticDiv3}>
@@ -77,6 +94,26 @@ function Statistics(props) {
           <span className={clsx(classes.statisticNumber, classes.statisticNumberGreen)}>{props.totalRecovered}</span>
         </div>
         <div className={classes.statisticDiv3}>
+          <h6 className={classes.statisticDivTitle}>DEATHS</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberPurple)}>{props.totalDeaths}</span>
+        </div>
+      </div>
+
+      {/* MOBILE - ALLON 1 ROW for MVP */}
+      <div className={clsx(classes.statisticsRow, classes.statisticsRowMobile)}>
+        <div className={classes.statisticDiv4}>
+          <h6 className={classes.statisticDivTitle}>AS OF</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{ dateString }</span>
+        </div>
+        <div className={classes.statisticDiv4}>
+          <h6 className={classes.statisticDivTitle}>INFECTED</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberBlack)}>{props.totalInfected}</span>
+        </div>
+        <div className={classes.statisticDiv4}>
+          <h6 className={classes.statisticDivTitle}>RECOVERED</h6>
+          <span className={clsx(classes.statisticNumber, classes.statisticNumberGreen)}>{props.totalRecovered}</span>
+        </div>
+        <div className={classes.statisticDiv4}>
           <h6 className={classes.statisticDivTitle}>DEATHS</h6>
           <span className={clsx(classes.statisticNumber, classes.statisticNumberPurple)}>{props.totalDeaths}</span>
         </div>
