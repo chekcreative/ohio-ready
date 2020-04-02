@@ -130,10 +130,10 @@ function Sidebar(props) {
   const [totalRecovered, updateTotalRecovered] = useState('-')
   const [totalDeaths, updateTotalDeaths] = useState('-')
 
-  let dateString = generateDateString(props.viewDateString, false)
+  const [dateString, updateDateString] = useState(generateDateString(props.viewDateString, false))
 
   useEffect(() => {
-    dateString = generateDateString(props.viewDateString, false)
+    updateDateString(generateDateString(props.viewDateString, false))
     getCaseData(props.viewDateString)
   }, [props.viewDateString])
 
@@ -143,14 +143,24 @@ function Sidebar(props) {
 
   const getCaseData = (asOfDate) => {
     let as_of_date = generateAsOfDate(asOfDate)
-    console.log(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`)
+    // console.log(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`)
     axios.get(`https://ohioready-api.zwink.net/v1/case/?as_of=${as_of_date}&page[size]=100`, axiosHeader)
     .then(
       (res) => {
         if (res.status === 200) {
           if (res.data.data) {
-            console.log(res.data.data)
             updateAllCountiesData(res.data.data)
+          }
+          
+          // if there's no data for this date, try the day before, back to jan 20. jan 20 is the earliest date we had any events, in the db
+          if (res.data.data.length === 0) {
+            let dataOrigin = new Date('Mon Jan 20 2020 0:00:00 GMT-0400 (EDT)')
+            var d = new Date(asOfDate);
+            d.setDate(d.getDate() - 1);
+            if (d >= dataOrigin) {
+              updateDateString(generateDateString(d, false))
+              getCaseData(d)
+            }
           }
         }
       }
