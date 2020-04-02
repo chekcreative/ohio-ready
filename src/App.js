@@ -10,6 +10,7 @@ import Container from '@material-ui/core/Container';
 import Sidebar from './components/sidebar/Sidebar'
 import NewsWrapper from './components/newsfeed/NewsWrapper'
 import DateDisplay from './components/DateDisplay'
+import StickyFooter from './components/StickyFooter'
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -51,6 +52,8 @@ function App() {
           <NewsWrapper></NewsWrapper>
           <DateDisplay></DateDisplay>
         </div>
+
+        <StickyFooter></StickyFooter>
 
       </Container>
     </div>
