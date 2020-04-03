@@ -1,26 +1,27 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../../actions/actions";
 import {connect} from "react-redux";
 // import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
 import {triggeringAgents} from "../../reducers/reducer";
-
 // styling
-import { makeStyles } from '@material-ui/core/styles';
-
+import {makeStyles} from '@material-ui/core/styles';
 // material ui components
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
-import Chip from "@material-ui/core/Chip";
-
 // custom components
 import NewsItem from './NewsItem'
 import ActiveFilters from './ActiveFilters'
-
 // utils
 import axios from 'axios';
 import axiosHeader from '../../utils/axiosHeader'
-import {publishedDate} from "../../utils/dateHelpers";
+import {
+  getEarliestFetchedPublishDate,
+  getPositionOfFirstNewsItemPublishedBefore,
+  getPublishDateOfFirstVisibleNewsItem,
+  scrollingRequired,
+  NEWS_ITEM_NAME
+} from "../../utils/newsFeedHelpers";
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
@@ -63,43 +64,40 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
 function NewsWrapper(props) {
 
-  // config state
   const classes = useStyles();
+  // news data
   const [newsObjects, setNewsObjects] = useState([]);
   const [included, setIncluded] = useState([]);
-
+  // page loading
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
   const [morePagesAvailable, setMorePagesAvailable] = useState(true);
   const [morePagesNeeded, setMorePagesNeeded] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
+  // chips
   const [authorizerNameFilter, setAuthorizerNameFilter] = useState(null)
   const [scopeFilter, setScopeFilter] = useState(null)
   const [tagFilter, setTagFilter] = useState([])
-  const NEWS_ITEM_NAME = "newsItem";
 
   useEffect(() => {
-    const viewDateString = new Date(props.viewDateString);
+    const viewDate = new Date(props.viewDateString);
+    const earliestFetchedPublishDate = getEarliestFetchedPublishDate(newsObjects);
 
-    const earliestFetchedPublishDate = getEarliestFetchedPublishDate();
-    if (viewDateString < earliestFetchedPublishDate){
+    if (earliestFetchedPublishDate && viewDate < earliestFetchedPublishDate){
       if (morePagesAvailable) {
-        newsObjects.length && setMorePagesNeeded(true);
+        setMorePagesNeeded(true);
         loadEvents()
       }
     } else {
       setMorePagesNeeded(false);
-      const publishDateOfFirstVisible = getPublishDateOfFirstVisibleNewsItem();
-      if (
-        publishDateOfFirstVisible &&
-        (viewDateString < publishDateOfFirstVisible || viewDateString > publishDateOfFirstVisible)
-      ) {
-        const scrollPosition = getPositionOfFirstNewsItemPublishedBefore(viewDateString);
+      if (scrollingRequired(newsObjects, viewDate)) {
+        const scrollPosition = getPositionOfFirstNewsItemPublishedBefore(newsObjects, viewDate);
         window.scrollTo(0, scrollPosition)
       }
     }
-  }, [props.viewDateString, newsObjects]);
+  }, [props.viewDateString, newsObjects, morePagesAvailable]);
 
   useEffect(() => {
     if (authorizerNameFilter === null && scopeFilter === null && tagFilter.length === 0) {
@@ -127,7 +125,6 @@ function NewsWrapper(props) {
       })
     }
 
-    // console.log(requestString)
 
     setIsFetching(true);
     if (morePagesAvailable) {
@@ -223,41 +220,9 @@ function NewsWrapper(props) {
     setTagFilter([...currentTagArray])
   }
 
-  const getEarliestFetchedPublishDate = () => {
-    return newsObjects.length
-      ? new Date(newsObjects[newsObjects.length-1].attributes.published_on)
-      : new Date();
-  };
-
-  const getPositionOfFirstNewsItemPublishedBefore = (date) => {
-    const ixNewsObjectToScrollTo = newsObjects.findIndex(object =>
-      publishedDate(object) <= date
-    );
-
-    const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
-    const elementToScrollTo = newsItemElements[ixNewsObjectToScrollTo];
-    return elementToScrollTo.offsetTop + elementToScrollTo.offsetParent.offsetTop;
-  };
-
-  const getPublishDateOfFirstVisibleNewsItem = () => {
-    if (newsObjects.length) {
-      const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
-
-      const ixFirstVisibleNewsItem = newsItemElements.findIndex(element =>
-        element.offsetTop + element.offsetParent.offsetTop >= document.documentElement.scrollTop
-      );
-
-      return ixFirstVisibleNewsItem > -1
-        ? publishedDate(newsObjects[ixFirstVisibleNewsItem])
-        : publishedDate(newsObjects[0]);
-    }
-
-    return null
-  };
-
   const updateViewDate = () => {
     if (props.triggeringAgent === triggeringAgents.NEWS_LIST) {
-      const publishedDate = getPublishDateOfFirstVisibleNewsItem();
+      const publishedDate = getPublishDateOfFirstVisibleNewsItem(newsObjects);
       if (publishedDate) {
         props.onScrollDateChange(publishedDate.toISOString());
       }
