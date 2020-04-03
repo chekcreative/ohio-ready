@@ -13,7 +13,7 @@ import Card from '@material-ui/core/Card';
 // components
 import Statistics from './Statistics'
 import OhioMap from './OhioMap'
-// import InfectionCurve from './InfectionCurve' ---- to be used later
+import InfectionCurve from './InfectionCurve'
 import CalendarPicker from "./CalendarPicker";
 import FooterIcons from './FooterIcons'
 
@@ -239,9 +239,8 @@ function Sidebar(props) {
             allCountiesData={allCountiesData}
             ></OhioMap>
 
-          {/* PAUSED FOR NOW - see https://github.com/chekcreative/ohio-ready/issues/7 */}
-          {/* <hr className={classes.sidebarHR}/>
-          <InfectionCurve></InfectionCurve> */}
+          <hr className={clsx(classes.sidebarHR, classes.onlyDesktopSidebarHR)}/>
+          <InfectionCurve></InfectionCurve>
 
           {/* FOOTER ICONS FOR MOBILE */}
           <div className={classes.footerIconMobile}>
