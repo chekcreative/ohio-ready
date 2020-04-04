@@ -12,6 +12,9 @@ import NewsWrapper from './components/newsfeed/NewsWrapper'
 import DateDisplay from './components/DateDisplay'
 import StickyFooter from './components/StickyFooter'
 
+// Detect IE
+import {isIE} from 'react-device-detect'
+
 const useStyles = makeStyles((theme) => ({
   content: {
     width: '100vw',
@@ -33,6 +36,20 @@ const useStyles = makeStyles((theme) => ({
 
 function App() {
   const classes = useStyles();
+
+  if (isIE) {
+    return (
+      <div className={classes.content}>
+        <Container maxWidth="lg" className={classes.container}>
+          <div>
+            <p>Internet Explorer is not supported.</p>
+            <p>Please use <a href="https://google.com/chrome" target="_blank" rel="noopener noreferrer">Chrome</a>, <a href="https://firefox.com/" target="_blank" rel="noopener noreferrer">Firefox</a>, or <a href="https://apple.com/safari" target="_blank" rel="noopener noreferrer">Safari</a>.</p>
+          </div>
+        </Container>
+      </div>
+    )
+  }
+
   return (
     <div className={classes.content}>
       <Container maxWidth="lg" className={classes.container}>
