@@ -234,7 +234,7 @@ const NewsItem = (props) => {
         <div className={classes.coverageWrapper}>
           {
             articlesArray.length > 0 ?
-            <img src={globe} className={classes.coverageSourceIcon}></img> :
+            <img src={globe} alt="Coverage Icon" className={classes.coverageSourceIcon}></img> :
             null
           }
           {
@@ -243,7 +243,7 @@ const NewsItem = (props) => {
               <h6>Coverage</h6>
               {
                 articlesArray.map((articleObject, i) =>
-                  <a href={ articleObject.articleUrl} key={'articleUrl' + i}>
+                  <a href={ articleObject.articleUrl} key={'articleUrl' + i} rel="noopener noreferrer" target="_blank">
                     { articleObject.publisherName }
                   </a>
                 )
@@ -253,13 +253,13 @@ const NewsItem = (props) => {
           }
         </div>
         <div className={classes.sourceWrapper}>
-          <img src={link} className={classes.coverageSourceIcon}></img>
+          <img src={link} alt="Source Icon" className={classes.coverageSourceIcon}></img>
           <div className={classes.innerSourceWrapper}>
             <h6>Source</h6>
             {
               props.newsObject.attributes &&
               props.newsObject.attributes.authoritative_url ?
-              <a href={ props.newsObject.attributes.authoritative_url }>
+              <a href={ props.newsObject.attributes.authoritative_url } rel="noopener noreferrer" target="_blank">
                 {   
                   authorizer &&
                   authorizer.attributes &&
