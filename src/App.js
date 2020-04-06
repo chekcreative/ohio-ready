@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef, useEffect} from 'react';
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -19,7 +19,13 @@ const useStyles = makeStyles((theme) => ({
   content: {
     width: '100vw',
     minHeight: '100vh',
-    backgroundColor: '#E4E9F1'
+    backgroundColor: '#E4E9F1',
+    '&:focus': {
+      outline: 'none',
+    },
+    '&::-moz-focus-inner': {
+      border: 0,
+    },
   },
   container: {
     paddingTop: theme.spacing(4),
@@ -35,6 +41,10 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function App() {
+  
+  const newsWrapperFocus = useRef();
+  useEffect(() => newsWrapperFocus.current && newsWrapperFocus.current.focus());
+
   const classes = useStyles();
 
   if (isIE) {
@@ -51,7 +61,7 @@ function App() {
   }
 
   return (
-    <div className={classes.content}>
+    <div className={classes.content} tabIndex="1" ref={newsWrapperFocus}j>
       <Container maxWidth="lg" className={classes.container}>
 
         {/* 
@@ -63,7 +73,7 @@ function App() {
           core concepts to the mobile layout: 
             - DateDisplay moves to display: none
             - Sidebar is removed from the flex flow by receiving position: absolute => pinned to the top of the screen
-         */}
+        */}
         <div className={classes.mainFlexWrapper}>
           <Sidebar></Sidebar>
           <NewsWrapper></NewsWrapper>

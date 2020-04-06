@@ -24,6 +24,34 @@ export function getPublishDateOfFirstVisibleNewsItem(newsObjects) {
   return null
 }
 
+export function getIdOfFirstVisibleNewsItem() {
+  const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
+
+  if(newsItemElements) {
+    const ixFirstVisibleNewsItem = newsItemElements.findIndex(element =>
+      element.offsetTop + element.offsetParent.offsetTop >= document.documentElement.scrollTop
+    );
+  
+    return ixFirstVisibleNewsItem > -1
+      ? newsItemElements[ixFirstVisibleNewsItem].children[0].children[0].id
+      : null;
+  }
+
+  return null;
+
+}
+
+export function getIdOfFirstNewsItem() {
+  const newsItemElements = [...document.getElementsByName(NEWS_ITEM_NAME)];
+
+  if(newsItemElements) {
+    return newsItemElements[0].children[0].children[0].id
+  }
+
+  return null;
+
+}
+
 export function scrollingRequired(newsObjects, viewDate) {
   const publishDateOfFirstVisible = getPublishDateOfFirstVisibleNewsItem(newsObjects);
   return publishDateOfFirstVisible &&
