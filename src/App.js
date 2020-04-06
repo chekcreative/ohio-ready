@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {ReactDOM} from 'react';
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,6 +11,24 @@ import Sidebar from './components/sidebar/Sidebar'
 import NewsWrapper from './components/newsfeed/NewsWrapper'
 import DateDisplay from './components/DateDisplay'
 import StickyFooter from './components/StickyFooter'
+import NewsItem from './components/newsfeed/NewsItem'
+
+// react hotkeys
+import { HotKeys } from "react-hotkeys";
+
+const keyMap = {
+  NEXT_EVENT: "j",
+  PREVIOUS_EVENT: "k"
+};
+
+const handlers = {
+  NEXT_EVENT: event => {
+    console.log("Go get the first event in view");
+  },
+  PREVIOUS_EVENT: event => {
+    console.log("Go get the first event in view");
+  }
+};
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -34,29 +52,31 @@ const useStyles = makeStyles((theme) => ({
 function App() {
   const classes = useStyles();
   return (
-    <div className={classes.content}>
-      <Container maxWidth="lg" className={classes.container}>
+    <HotKeys keyMap={keyMap} handlers={handlers}>
+      <div className={classes.content}>
+        <Container maxWidth="lg" className={classes.container}>
 
-        {/* 
-          core concepts to the desktop layout:
-            - Sidebar is a fixed width
-            - DateDisplay is a fixed width
-            - the content in between flex-grows to fill the rest of the space
+          {/* 
+            core concepts to the desktop layout:
+              - Sidebar is a fixed width
+              - DateDisplay is a fixed width
+              - the content in between flex-grows to fill the rest of the space
 
-          core concepts to the mobile layout: 
-            - DateDisplay moves to display: none
-            - Sidebar is removed from the flex flow by receiving position: absolute => pinned to the top of the screen
-         */}
-        <div className={classes.mainFlexWrapper}>
-          <Sidebar></Sidebar>
-          <NewsWrapper></NewsWrapper>
-          <DateDisplay></DateDisplay>
-        </div>
+            core concepts to the mobile layout: 
+              - DateDisplay moves to display: none
+              - Sidebar is removed from the flex flow by receiving position: absolute => pinned to the top of the screen
+          */}
+          <div className={classes.mainFlexWrapper}>
+            <Sidebar></Sidebar>
+            <NewsWrapper></NewsWrapper>
+            <DateDisplay></DateDisplay>
+          </div>
 
-        <StickyFooter></StickyFooter>
+          <StickyFooter></StickyFooter>
 
-      </Container>
-    </div>
+        </Container>
+      </div>
+    </HotKeys>
   );
 }
 

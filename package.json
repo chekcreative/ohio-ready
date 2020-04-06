@@ -16,6 +16,7 @@
     "moment-timezone": "^0.5.28",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "react-hotkeys": "^2.0.0",
     "react-inlinesvg": "^1.2.0",
     "react-redux": "^7.2.0",
     "react-scripts": "3.4.1",
