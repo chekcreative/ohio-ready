@@ -270,6 +270,26 @@ const NewsItem = (props) => {
 
         {/* coverage & source */}
         <div className={classes.coverageSourceWrapper}>
+          <div className={classes.sourceWrapper}>
+            <img src={link} alt="Source Icon" className={classes.coverageSourceIcon}></img>
+            <div className={classes.innerSourceWrapper}>
+              <h6>Source</h6>
+              {
+                props.newsObject.attributes &&
+                props.newsObject.attributes.authoritative_url ?
+                <a href={ props.newsObject.attributes.authoritative_url } rel="noopener noreferrer" target="_blank">
+                  {   
+                    authorizer &&
+                    authorizer.attributes &&
+                    authorizer.attributes.name ? 
+                    authorizer.attributes.name : 
+                    null
+                  }
+                </a> : 
+                null
+              }
+            </div>
+          </div>
           <div className={classes.coverageWrapper}>
             {
               articlesArray.length > 0 ?
@@ -290,26 +310,6 @@ const NewsItem = (props) => {
               </div> :
               null
             }
-          </div>
-          <div className={classes.sourceWrapper}>
-            <img src={link} alt="Source Icon" className={classes.coverageSourceIcon}></img>
-            <div className={classes.innerSourceWrapper}>
-              <h6>Source</h6>
-              {
-                props.newsObject.attributes &&
-                props.newsObject.attributes.authoritative_url ?
-                <a href={ props.newsObject.attributes.authoritative_url } rel="noopener noreferrer" target="_blank">
-                  {   
-                    authorizer &&
-                    authorizer.attributes &&
-                    authorizer.attributes.name ? 
-                    authorizer.attributes.name : 
-                    null
-                  }
-                </a> : 
-                null
-              }
-            </div>
           </div>
         </div>
 
