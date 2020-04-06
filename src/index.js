@@ -12,6 +12,11 @@ import { ThemeProvider } from '@material-ui/core/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import createBreakpoints from '@material-ui/core/styles/createBreakpoints'
 
+// react hotkeys
+// keyboard shortcuts
+import { HotKeys } from "react-hotkeys";
+import { getIdOfFirstVisibleNewsItem, getIdOfFirstNewsItem } from "./utils/newsFeedHelpers";
+
 // our custom breakpoints for MATERIAL-UI
 const breakpoints = createBreakpoints({})
 breakpoints.values.sm = 720;
@@ -29,14 +34,49 @@ const store = createStore(rootReducer, compose(
     window.__REDUX_DEVTOOLS_EXTENSION__ ? window.__REDUX_DEVTOOLS_EXTENSION__() : noop => noop,
 ));
 
+// key mappings and handler
+const keyMap = {
+  NEXT_EVENT: "j",
+  PREVIOUS_EVENT: "k",
+  TOP: 't'
+};
+const handlers = {
+  NEXT_EVENT: event => {
+    console.log("getting eventId");
+    var eventId = getIdOfFirstVisibleNewsItem();
+    console.log("Event ID is " + eventId);
+    let eventElement = document.getElementById(eventId);
+    eventElement.scrollIntoView();
+    eventElement.focus();
+  },
+  PREVIOUS_EVENT: event => {
+    console.log("getting eventId");
+    var eventId = getIdOfFirstVisibleNewsItem();
+    console.log("Event ID is " + eventId);
+    let eventElement = document.getElementById(eventId);
+    eventElement.scrollIntoView();
+    eventElement.focus();
+  },
+  TOP: event => {
+    console.log("getting eventId");
+    var eventId = getIdOfFirstNewsItem();
+    console.log("Event ID is " + eventId);
+    let eventElement = document.getElementById(eventId);
+    eventElement.scrollIntoView();
+    eventElement.focus();
+  }
+};
+
 ReactDOM.render(
-  <React.StrictMode>
-    <ThemeProvider theme={theme}>
-        <Provider store={store}>
-            <App />
-        </Provider>
-    </ThemeProvider>
-  </React.StrictMode>,
+  <HotKeys keyMap={keyMap} handlers={handlers} root>
+    <React.StrictMode>
+      <ThemeProvider theme={theme}>
+          <Provider store={store}>
+              <App/>
+          </Provider>
+      </ThemeProvider>
+    </React.StrictMode>
+  </HotKeys>,
   document.getElementById('root')
 );
 

@@ -16,6 +16,7 @@ import OhioMap from './OhioMap'
 import InfectionCurve from './InfectionCurve'
 import CalendarPicker from "./CalendarPicker";
 import FooterIcons from './FooterIcons'
+import KeyboardNav from './KeyboardNav'
 
 // icons
 import logo from '../../icons/ohio_ready_icon.svg'
@@ -111,6 +112,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   footerIconDesktop: {
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
+  },
+  keyboardNavDesktop: {
+    marginTop: '20px',
     [theme.breakpoints.down('xs')]: {
       display: 'none'
     }
@@ -253,6 +260,11 @@ function Sidebar(props) {
         {/* FOOTER ICONS FOR DESKTOP */}
         <div className={classes.footerIconDesktop}>
           <FooterIcons></FooterIcons>
+        </div>
+
+        {/* FOOTER ICONS FOR DESKTOP */}
+        <div className={classes.keyboardNavDesktop}>
+          <KeyboardNav></KeyboardNav>
         </div>
 
       </div>
