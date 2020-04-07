@@ -157,7 +157,6 @@ const NewsItem = (props) => {
   })
 
   function cardClick(e) {
-    e.preventDefault();
     e.target.focus();
   }
 
