@@ -18,7 +18,10 @@ const useStyles = makeStyles((theme) => ({
     zIndex: 100,
     backgroundColor: 'hsla(0, 0%, 35%, 0.9)',
     top: '0',
-    left: '0'
+    left: '0',
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
   },
   modal: {
     position: 'absolute',
@@ -26,8 +29,10 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: '100%',
     height: '100%',
-    margin: '0 16px',
     zIndex: 1000,
+    [theme.breakpoints.down('xs')]: {
+      display: 'none'
+    }
   },
   modalCard: {
     padding: '32px'
@@ -192,10 +197,10 @@ function FullChartModal(props) {
                       AS OF {data.as_of_string}
                     </p>
                     <p style={{color: infected_text_color}} className={classes.tooltipLabel}>
-                      {data.total_infected} INFECTED
+                      {data["TOTAL CASES"]} CASES
                     </p>
                     <p style={{color: deaths_bar_color}} className={classes.tooltipLabel}>
-                      {data.total_deaths} DEATHS
+                      {data["TOTAL DEATHS"]} DEATHS
                     </p>
                   </div>
                 )

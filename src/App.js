@@ -19,7 +19,7 @@ import {isIE} from 'react-device-detect'
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    width: '100vw',
+    width: '100%',
     minHeight: '100vh',
     backgroundColor: '#E4E9F1',
     '&:focus': {

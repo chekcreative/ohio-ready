@@ -71,12 +71,24 @@ const infected_bar_color = "hsla(233, 100%, 83%)";
 const deaths_bar_color = "red";
 
 
+const chartTheme = {
+  axis: {
+    ticks: {
+      text: {
+        fontSize: '10px',
+        fill: '#757575',
+        fontFamily: 'inherit',
+      }
+    }
+  }
+};
+
 function InfectionCurve(props) {
   const classes = useStyles();
   const [chartData, setChartData] = useState(caseData);
 
   useEffect(() => {
-      // getCaseData()
+      getCaseData()
     }, []);
 
   const getCaseData = () => {
@@ -95,7 +107,7 @@ function InfectionCurve(props) {
                   total_deaths: dataPoint.sum_deaths,
                 }
               })
-              .filter(dataPoint => dataPoint.day_of_week === 6);
+              .filter(dataPoint => dataPoint.day_of_week === 3);
 
             setChartData(newChartData);
           }
@@ -104,6 +116,26 @@ function InfectionCurve(props) {
       .catch((err) => {
         console.log(err);
       })
+  };
+
+  const CustomTick = tick => {
+    let nTicksToShow = 3;
+    let tickInterval = Math.floor(chartData.length / (nTicksToShow - 1));
+    let showTick = (chartData.length - tick.tickIndex - 1) % tickInterval === 0;
+    return showTick ? (
+      <g transform={`translate(${tick.x},${tick.y + 12})`}>
+        <text
+          textAnchor="middle"
+          dominantBaseline="middle"
+          style={{
+            fill: chartTheme.axis.ticks.text.fill,
+            fontSize: chartTheme.axis.ticks.text.fontSize,
+          }}
+        >
+          {tick.value}
+        </text>
+      </g>
+    ) : null
   };
 
   return (
@@ -126,8 +158,8 @@ function InfectionCurve(props) {
           data={chartData}
           keys={['total_deaths', 'total_infected']}
           indexBy="as_of_string"
-          margin={{ top: 0, right: 0, bottom: 5, left: 40 }}
-          padding={0.3}
+          margin={{ top: 0, right: 0, bottom: 15, left: 40 }}
+          padding={0.2}
           colors={[deaths_bar_color, infected_bar_color]}
           enableLabel={false}
           tooltip={({data}) => (
@@ -136,7 +168,7 @@ function InfectionCurve(props) {
                 AS OF {data.as_of_string}
               </p>
               <p style={{color: infected_text_color}} className={classes.tooltipLabel}>
-                {data.total_infected} INFECTED
+                {data.total_infected} CASES
               </p>
               <p style={{color: deaths_bar_color}} className={classes.tooltipLabel}>
                 {data.total_deaths} DEATHS
@@ -149,7 +181,10 @@ function InfectionCurve(props) {
           gridYValues={4}
           axisTop={null}
           axisRight={null}
-          axisBottom={null}
+          axisBottom={{
+            tickPadding: 0,
+            renderTick: CustomTick,
+          }}
           axisLeft={{
             tickSize: 0,
             tickPadding: 4,
@@ -159,6 +194,7 @@ function InfectionCurve(props) {
           animate={true}
           motionStiffness={200}
           motionDamping={30}
+          theme={chartTheme}
          />
       </div>
     </div>
