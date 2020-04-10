@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import debounce from 'lodash.debounce';
 import {setDateFromScroll} from "../../actions/actions";
 import {connect} from "react-redux";
-// import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
+import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
 import {triggeringAgents} from "../../reducers/reducer";
 // styling
 import {makeStyles} from '@material-ui/core/styles';
@@ -69,11 +69,11 @@ function NewsWrapper(props) {
 
   const classes = useStyles();
   // news data
-  const [newsObjects, setNewsObjects] = useState([]);
-  const [included, setIncluded] = useState([]);
+  const [newsObjects, setNewsObjects] = useState(sampleNewsObjects);
+  const [included, setIncluded] = useState(sampleIncluded);
   // page loading
   const [numberPagesLoaded, setNumberPagesLoaded] = useState(0);
-  const [morePagesAvailable, setMorePagesAvailable] = useState(true);
+  const [morePagesAvailable, setMorePagesAvailable] = useState(false);
   const [morePagesNeeded, setMorePagesNeeded] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
   // chips
@@ -102,8 +102,8 @@ function NewsWrapper(props) {
   useEffect(() => {
     if (authorizerNameFilter === null && scopeFilter === null && tagFilter.length === 0) {
       setNumberPagesLoaded(0)
-      setNewsObjects([])
-      setMorePagesAvailable(true)
+      setNewsObjects(sampleNewsObjects)
+      setMorePagesAvailable(false)
     }
     loadEvents()
   }, [authorizerNameFilter, scopeFilter, tagFilter])

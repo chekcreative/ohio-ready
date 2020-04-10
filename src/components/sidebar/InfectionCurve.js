@@ -11,6 +11,8 @@ import axios from "axios";
 import axiosHeader from "../../utils/axiosHeader";
 import generateDateString from "../../utils/generateDateString";
 import * as moment from "moment";
+import {caseData} from "../../sampleData/weeklyCaseData_202000410";
+import fullscreenIcon from "../../icons/fullscreen_white.svg";
 
 const useStyles = makeStyles((theme) => ({
   chartAreaWrapper: {
@@ -19,14 +21,43 @@ const useStyles = makeStyles((theme) => ({
       display: 'none'
     }
   },
-  chartWrapper: {
-    height: '15rem',
-    paddingTop: '15px',
+  chartTitleWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   chartTitle: {
     fontSize: '12px',
+    color: '#000',
+    fontWeight: '700',
+    margin: 0,
+  },
+  chartSubTitle: {
+    fontSize: '11px',
     color: '#757575',
-    fontWeight: '700'
+    fontWeight: '700',
+    margin: 0,
+  },
+  iconWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: '0',
+    backgroundColor: '#4B00FF',
+    borderRadius: '4px',
+    height: '40px',
+    width: '40px',
+    marginLeft: '10px',
+    cursor: 'pointer'
+  },
+  fullscreenIcon: {
+    padding: '3px',
+    height: '100%',
+    width: '100%',
+  },
+  chartWrapper: {
+    height: '15rem',
+    paddingTop: '15px',
   },
   tooltipLabel: {
     fontSize: '10px',
@@ -42,10 +73,10 @@ const deaths_bar_color = "red";
 
 function InfectionCurve(props) {
   const classes = useStyles();
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState(caseData);
 
   useEffect(() => {
-      getCaseData()
+      // getCaseData()
     }, []);
 
   const getCaseData = () => {
@@ -77,8 +108,19 @@ function InfectionCurve(props) {
 
   return (
     <div className={classes.chartAreaWrapper}>
-      <h6 className={classes.chartTitle}>WEEKLY INFECTION TOTALS</h6>
-      <button onClick={() => {props.openFullChart()}}>Open</button>
+      <div className={classes.chartTitleWrapper}>
+        <div>
+          <h3 className={classes.chartTitle}>CASE COUNTS</h3>
+          <h4 className={classes.chartSubTitle}>WEEKLY TOTALS</h4>
+        </div>
+        <div className={classes.iconWrapper}>
+          <img
+            src={fullscreenIcon}
+            alt="View Fullscreen Chart"
+            className={classes.fullscreenIcon}
+            onClick={() => {props.openFullChart()}}/>
+        </div>
+      </div>
       <div className={classes.chartWrapper}>
         <ResponsiveBar
           data={chartData}

@@ -7,6 +7,8 @@ import generateDateString from "../utils/generateDateString";
 import {ResponsiveBar} from "@nivo/bar";
 import {closeFullChart} from "../actions/actions";
 import {connect} from "react-redux";
+import {caseData} from "../sampleData/dailyCaseData_20200410";
+import closeIcon from "../icons/close_white.svg";
 
 const useStyles = makeStyles((theme) => ({
   cover: {
@@ -21,27 +23,56 @@ const useStyles = makeStyles((theme) => ({
   modal: {
     position: 'absolute',
     top: 0,
-    left: '243px',
-    width: 'calc(100% - 243px - 15px)',
+    left: 0,
+    width: '100%',
     height: '100%',
     margin: '0 16px',
     zIndex: 1000,
   },
   modalCard: {
-    padding: '16px'
+    padding: '32px'
+  },
+  chartTitleWrapper: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  chartTitle: {
+    fontSize: '16px',
+    color: '#000',
+    fontWeight: '700',
+    margin: 0,
+  },
+  chartSubTitle: {
+    fontSize: '12px',
+    color: '#757575',
+    fontWeight: '700',
+    margin: 0,
+  },
+  iconWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: '0',
+    backgroundColor: '#4B00FF',
+    borderRadius: '4px',
+    height: '40px',
+    width: '40px',
+    marginLeft: '10px',
+    cursor: 'pointer'
+  },
+  closeIcon: {
+    padding: '3px',
+    height: '100%',
+    width: '100%',
   },
   chartWrapper: {
     height: '41rem',
-    margin: '15px 0',
+    margin: '32px 0 16px',
   },
   sticky: {
     position: 'sticky',
     top: '32px'
-  },
-  chartTitle: {
-    fontSize: '14px',
-    color: '#757575',
-    fontWeight: '700'
   },
   tooltipLabel: {
     fontSize: '12px',
@@ -63,16 +94,22 @@ const chartTheme = {
         fontFamily: 'inherit',
       }
     }
+  },
+  legends: {
+    text: {
+      fontSize: 12,
+      fontWeight: '700',
+    }
   }
 };
 
 function FullChartModal(props) {
 
   const classes = useStyles();
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState(caseData);
 
   useEffect(() => {
-    getCaseData()
+    // getCaseData()
   }, []);
 
   const getCaseData = () => {
@@ -86,8 +123,8 @@ function FullChartModal(props) {
               .map((dataPoint) => {
                 return {
                   as_of_string: generateDateString(dataPoint.as_of, false),
-                  total_infected: dataPoint.sum_total,
-                  total_deaths: dataPoint.sum_deaths,
+                  "TOTAL CASES": dataPoint.sum_total,
+                  "TOTAL DEATHS": dataPoint.sum_deaths,
                 }
               });
 
@@ -127,15 +164,26 @@ function FullChartModal(props) {
       <div className={classes.modal}>
         <div className={classes.sticky}>
           <Card className={classes.modalCard}>
-            <h6 className={classes.chartTitle}>DAILY INFECTION TOTALS</h6>
-            <button onClick={() => {props.closeFullChart()}}>Close</button>
+            <div className={classes.chartTitleWrapper}>
+              <div>
+                <h3 className={classes.chartTitle}>CASE COUNTS</h3>
+                <h4 className={classes.chartSubTitle}>DAILY TOTALS</h4>
+              </div>
+              <div className={classes.iconWrapper}>
+                <img
+                  src={closeIcon}
+                  alt="Close Fullscreen Chart"
+                  className={classes.closeIcon}
+                  onClick={() => {props.closeFullChart()}}/>
+              </div>
+            </div>
             <div className={classes.chartWrapper}>
               <ResponsiveBar
                 data={chartData}
-                keys={['total_deaths', 'total_infected']}
+                keys={['TOTAL DEATHS', 'TOTAL CASES']}
                 indexBy="as_of_string"
-                margin={{ top: 0, right: 0, bottom: 25, left: 40 }}
-                padding={0.3}
+                margin={{ top: 0, right: 0, bottom: 65, left: 40 }}
+                padding={0.2}
                 colors={[deaths_bar_color, infected_bar_color]}
                 enableLabel={false}
                 tooltip={({data}) => (
@@ -167,6 +215,18 @@ function FullChartModal(props) {
                   tickRotation: 0,
                   tickValues: 5
                 }}
+                legends={[
+                  {
+                    dataFrom: 'keys',
+                    anchor: 'bottom-left',
+                    direction: 'row',
+                    translateX: 0,
+                    translateY: 65,
+                    itemWidth: 125,
+                    itemHeight: 20,
+                    itemTextColor: '#757575'
+                  }
+                ]}
                 animate={true}
                 motionStiffness={200}
                 motionDamping={30}
