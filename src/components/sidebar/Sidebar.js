@@ -13,7 +13,7 @@ import Card from '@material-ui/core/Card';
 // components
 import Statistics from './Statistics'
 import OhioMap from './OhioMap'
-import InfectionCurve from './InfectionCurve'
+import InfectionCurve from './SidebarChart'
 import CalendarPicker from "./CalendarPicker";
 import FooterIcons from './FooterIcons'
 import KeyboardNav from './KeyboardNav'
@@ -26,7 +26,7 @@ import generateDateString from '../../utils/generateDateString'
 import generateAsOfDate from '../../utils/generateAsOfDate'
 import axios from 'axios';
 import axiosHeader from '../../utils/axiosHeader'
-import {openFullChart} from "../../actions/actions";
+
 
 const useStyles = makeStyles((theme) => ({
   sidebarWrapper: {
