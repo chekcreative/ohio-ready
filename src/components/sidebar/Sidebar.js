@@ -26,6 +26,7 @@ import generateDateString from '../../utils/generateDateString'
 import generateAsOfDate from '../../utils/generateAsOfDate'
 import axios from 'axios';
 import axiosHeader from '../../utils/axiosHeader'
+import {openFullChart} from "../../actions/actions";
 
 const useStyles = makeStyles((theme) => ({
   sidebarWrapper: {

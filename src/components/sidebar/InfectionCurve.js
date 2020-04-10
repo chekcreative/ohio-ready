@@ -1,5 +1,7 @@
 import React, {useEffect, useState} from 'react';
+import {connect} from "react-redux";
 import { ResponsiveBar } from '@nivo/bar'
+import {openFullChart} from "../../actions/actions";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -38,7 +40,7 @@ const infected_bar_color = "hsla(233, 100%, 83%)";
 const deaths_bar_color = "red";
 
 
-function InfectionCurve() {
+function InfectionCurve(props) {
   const classes = useStyles();
   const [chartData, setChartData] = useState([]);
 
@@ -76,6 +78,7 @@ function InfectionCurve() {
   return (
     <div className={classes.chartAreaWrapper}>
       <h6 className={classes.chartTitle}>WEEKLY INFECTION TOTALS</h6>
+      <button onClick={() => {props.openFullChart()}}>Open</button>
       <div className={classes.chartWrapper}>
         <ResponsiveBar
           data={chartData}
@@ -120,4 +123,12 @@ function InfectionCurve() {
   );
 }
 
-export default InfectionCurve;
+function mapDispatchToProps(dispatch) {
+  return {
+    openFullChart: () => {
+      dispatch(openFullChart())
+    }
+  }
+}
+
+export default connect(null, mapDispatchToProps)(InfectionCurve);
