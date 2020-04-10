@@ -13,7 +13,7 @@ import Card from '@material-ui/core/Card';
 // components
 import Statistics from './Statistics'
 import OhioMap from './OhioMap'
-import InfectionCurve from './SidebarChart'
+import InfectionCurve from './InfectionsChart'
 import CalendarPicker from "./CalendarPicker";
 import FooterIcons from './FooterIcons'
 import KeyboardNav from './KeyboardNav'

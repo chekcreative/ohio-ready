@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 // redux
 import {connect} from "react-redux";
@@ -97,8 +97,20 @@ function FullChartModal(props) {
   const classes = useStyles();
   const [chartData, setChartData] = useState([]);
 
+  const escFunction = useCallback((event) => {
+    if (event.key === 'Escape') {
+      props.closeFullChart();
+    }
+  }, [props]);
+
   useEffect(() => {
-    getCaseData()
+    getCaseData();
+
+    document.addEventListener("keydown", escFunction, false);
+
+    return () => {
+      document.removeEventListener("keydown", escFunction, false);
+    };
   });
 
   const getCaseData = () => {

@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-function SidebarChart(props) {
+function InfectionsChart(props) {
   const classes = useStyles();
   const [chartData, setChartData] = useState([]);
 
@@ -116,4 +116,4 @@ function mapDispatchToProps(dispatch) {
   }
 }
 
-export default connect(null, mapDispatchToProps)(SidebarChart);
+export default connect(null, mapDispatchToProps)(InfectionsChart);
