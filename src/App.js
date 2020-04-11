@@ -1,4 +1,5 @@
 import React, {useRef, useEffect} from 'react';
+import {connect} from "react-redux";
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,13 +12,14 @@ import Sidebar from './components/sidebar/Sidebar'
 import NewsWrapper from './components/newsfeed/NewsWrapper'
 import DateDisplay from './components/DateDisplay'
 import StickyFooter from './components/StickyFooter'
+import FullChartModal from "./components/FullChartModal";
 
 // Detect IE
 import {isIE} from 'react-device-detect'
 
 const useStyles = makeStyles((theme) => ({
   content: {
-    width: '100vw',
+    width: '100%',
     minHeight: '100vh',
     backgroundColor: '#E4E9F1',
     '&:focus': {
@@ -36,11 +38,12 @@ const useStyles = makeStyles((theme) => ({
     }
   },
   mainFlexWrapper: {
-    display: 'flex'
+    display: 'flex',
+    position: 'relative',
   }
 }));
 
-function App() {
+function App(props) {
   
   const newsWrapperFocus = useRef();
   useEffect(() => newsWrapperFocus.current && newsWrapperFocus.current.focus());
@@ -78,6 +81,7 @@ function App() {
           <Sidebar></Sidebar>
           <NewsWrapper></NewsWrapper>
           <DateDisplay></DateDisplay>
+          {props.isFullChartOpen && <FullChartModal/>}
         </div>
 
         <StickyFooter></StickyFooter>
@@ -87,4 +91,10 @@ function App() {
   );
 }
 
-export default App;
+function mapStateToProps(state) {
+  return {
+    isFullChartOpen: state.isFullChartOpen
+  }
+}
+
+export default connect(mapStateToProps, null)(App);
