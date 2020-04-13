@@ -111,7 +111,7 @@ function FullChartModal(props) {
     return () => {
       document.removeEventListener("keydown", escFunction, false);
     };
-  });
+  }, []);
 
   const getCaseData = () => {
     getDailyCaseTotals()
