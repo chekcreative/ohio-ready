@@ -26,7 +26,7 @@ import {
 } from "../utils/getAggregateCaseData";
 import {barChartColors} from "../utils/barChartStyling";
 
-import {caseData} from "../sampleData/dailyCaseData_20200413";
+// import {caseData} from "../sampleData/dailyCaseData_20200413";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -157,8 +157,8 @@ function ChartLegend() {
 function FullChartModal(props) {
 
   const classes = useStyles();
-  const [chartData, setChartData] = useState(caseData);
-  const [isLoading, setIsLoading] = useState(false);
+  const [chartData, setChartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [chartScroll, setChartScroll] = useState(0);
   const chartWrapper = useRef(null);
 
@@ -169,11 +169,11 @@ function FullChartModal(props) {
   }, [props]);
 
   useEffect(() => {
-    // setIsLoading(true);
-    // getCaseData()
-    //   .then(() => {
-    //     setIsLoading(false);
-    //   });
+    setIsLoading(true);
+    getCaseData()
+      .then(() => {
+        setIsLoading(false);
+      });
 
     document.addEventListener("keydown", escFunction, false);
 
@@ -192,7 +192,7 @@ function FullChartModal(props) {
       })
   };
 
-  const handleScroll = (event) => {
+  const handleScroll = () => {
     setChartScroll(chartWrapper.current.scrollLeft);
   };
 

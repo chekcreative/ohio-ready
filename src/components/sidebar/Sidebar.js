@@ -142,7 +142,7 @@ function Sidebar(props) {
 
   useEffect(() => {
     updateDateString(generateDateString(props.viewDateString, false))
-    // getCaseData(props.viewDateString)
+    getCaseData(props.viewDateString)
   }, [props.viewDateString])
 
   useEffect(() => {

@@ -22,7 +22,7 @@ import {
   VERTICAL_FILL_KEY
 } from "../../utils/getAggregateCaseData";
 
-import {caseData} from "../../sampleData/weeklyCaseData_20200413";
+// import {caseData} from "../../sampleData/weeklyCaseData_20200413";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -74,10 +74,10 @@ const useStyles = makeStyles((theme) => ({
 
 function InfectionsChart(props) {
   const classes = useStyles();
-  const [chartData, setChartData] = useState(caseData);
+  const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    // getCaseData()
+    getCaseData()
   }, []);
 
   const getCaseData = () => {
