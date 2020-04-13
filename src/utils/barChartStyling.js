@@ -45,7 +45,7 @@ export function nivoTheme(fontSize) {
 }
 
 export function buildCustomTick(dataLength, nTicksToShow, theme) {
-  let tickInterval = Math.floor(dataLength / (nTicksToShow - 1));
+  let tickInterval = Math.min(7, Math.floor(dataLength / (nTicksToShow - 1)));
 
   return tick => {
     let showTick = (dataLength - tick.tickIndex - 1) % tickInterval === 0;

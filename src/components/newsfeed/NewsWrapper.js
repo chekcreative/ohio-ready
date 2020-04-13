@@ -88,7 +88,7 @@ function NewsWrapper(props) {
     if (earliestFetchedPublishDate && viewDate < earliestFetchedPublishDate){
       if (morePagesAvailable) {
         setMorePagesNeeded(true);
-        loadEvents()
+        // loadEvents()
       }
     } else {
       setMorePagesNeeded(false);
@@ -105,7 +105,7 @@ function NewsWrapper(props) {
       setNewsObjects([])
       setMorePagesAvailable(true)
     }
-    loadEvents()
+    // loadEvents()
   }, [authorizerNameFilter, scopeFilter, tagFilter])
 
   const loadEvents = () => {
@@ -234,7 +234,7 @@ function NewsWrapper(props) {
   window.onscroll = debounce(() => {
     const scrolledToBottom = window.innerHeight + document.documentElement.scrollTop + 1 >= document.documentElement.offsetHeight;
     if (scrolledToBottom) {
-      loadEvents();
+      // loadEvents();
     }
 
     updateViewDate();

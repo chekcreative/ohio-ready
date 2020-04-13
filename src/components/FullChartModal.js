@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 // redux
 import {connect} from "react-redux";
@@ -19,7 +19,7 @@ import closeIcon from "../icons/close_white.svg";
 // utils
 import {AS_OF_KEY, getDailyCaseTotals, TOTAL_CASES_KEY, TOTAL_DEATHS_KEY} from "../utils/getAggregateCaseData";
 
-// import {caseData} from "../sampleData/dailyCaseData_20200413";
+import {caseData} from "../sampleData/dailyCaseData_20200413";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -86,6 +86,8 @@ const useStyles = makeStyles((theme) => ({
   chartWrapper: {
     height: '41rem',
     margin: '32px 0 16px',
+    overflowX: 'auto',
+    overflowY: 'hidden',
   },
   sticky: {
     position: 'sticky',
@@ -101,7 +103,9 @@ const useStyles = makeStyles((theme) => ({
 function FullChartModal(props) {
 
   const classes = useStyles();
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState(caseData);
+  const [chartScroll, setChartScroll] = useState(0);
+  const chartWrapper = useRef(null);
 
   const escFunction = useCallback((event) => {
     if (event.key === 'Escape') {
@@ -110,14 +114,23 @@ function FullChartModal(props) {
   }, [props]);
 
   useEffect(() => {
-    getCaseData();
+    // getCaseData();
 
     document.addEventListener("keydown", escFunction, false);
 
     return () => {
       document.removeEventListener("keydown", escFunction, false);
     };
+
   }, []);
+
+  useEffect(() => {
+    console.log(chartWrapper.current);
+    console.log(chartWrapper.current.scrollWidth);
+    console.log(chartWrapper.current.clientWidth);
+    console.log(chartWrapper.current.scrollWidth - chartWrapper.current.clientWidth);
+  }, [chartData]);
+
 
   const getCaseData = () => {
     getDailyCaseTotals()
@@ -127,6 +140,10 @@ function FullChartModal(props) {
       .catch((err) => {
         console.log(err);
       })
+  };
+
+  const handleScroll = (event) => {
+    setChartScroll(chartWrapper.current.scrollLeft);
   };
 
   return (
@@ -149,11 +166,16 @@ function FullChartModal(props) {
                   onClick={() => {props.closeFullChart()}}/>
               </div>
             </div>
-            <div className={classes.chartWrapper}>
+            <div
+              className={classes.chartWrapper}
+              ref={chartWrapper}
+              onScroll={handleScroll}
+            >
               <FullBarChart
                 chartData={chartData}
                 keys={[TOTAL_DEATHS_KEY, TOTAL_CASES_KEY]}
                 indexBy={AS_OF_KEY}
+                scrollPosition={chartScroll}
               />
             </div>
             <div>

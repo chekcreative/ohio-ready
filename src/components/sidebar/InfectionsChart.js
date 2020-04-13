@@ -15,6 +15,7 @@ import fullscreenIcon from "../../icons/fullscreen_white.svg";
 
 // utils
 import {AS_OF_KEY, getSaturdayCaseTotals, TOTAL_CASES_KEY, TOTAL_DEATHS_KEY} from "../../utils/getAggregateCaseData";
+import {caseData} from "../../sampleData/weeklyCaseData_20200413";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -66,10 +67,10 @@ const useStyles = makeStyles((theme) => ({
 
 function InfectionsChart(props) {
   const classes = useStyles();
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState(caseData);
 
   useEffect(() => {
-    getCaseData()
+    // getCaseData()
   }, []);
 
   const getCaseData = () => {
