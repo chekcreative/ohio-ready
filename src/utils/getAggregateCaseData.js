@@ -6,6 +6,7 @@ import * as moment from "moment";
 export const AS_OF_KEY = "as_of";
 export const TOTAL_CASES_KEY = 'TOTAL CASES';
 export const TOTAL_DEATHS_KEY = 'TOTAL DEATHS';
+export const VERTICAL_FILL_KEY = 'VERTICAL_FILL_KEY';
 
 
 const dateOfEarliestData = moment.utc("2020-02-21");
@@ -13,14 +14,15 @@ const dateOfEarliestData = moment.utc("2020-02-21");
 
 export function getSaturdayCaseTotals() {
   return getCaseTotals()
-    .then(caseData => {
-      return caseData
+    .then(({caseTotals, maxCaseCount}) => {
+      return caseTotals
         .filter(dataPoint => dataPoint.day_of_week === 6)
         .map((dataPoint) => {
           return {
             [AS_OF_KEY]: dataPoint[AS_OF_KEY],
             [TOTAL_CASES_KEY]: dataPoint[TOTAL_CASES_KEY],
             [TOTAL_DEATHS_KEY]: dataPoint[TOTAL_DEATHS_KEY],
+            [VERTICAL_FILL_KEY]: maxCaseCount - dataPoint[TOTAL_CASES_KEY] - dataPoint[TOTAL_DEATHS_KEY],
           }
         })
     })
@@ -31,12 +33,13 @@ export function getSaturdayCaseTotals() {
 
 export function getDailyCaseTotals() {
   return getCaseTotals()
-    .then(caseData => {
-      return caseData.map((dataPoint) => {
+    .then(({caseTotals, maxCaseCount}) => {
+      return caseTotals.map((dataPoint) => {
         return {
           [AS_OF_KEY]: dataPoint[AS_OF_KEY],
           [TOTAL_CASES_KEY]: dataPoint[TOTAL_CASES_KEY],
           [TOTAL_DEATHS_KEY]: dataPoint[TOTAL_DEATHS_KEY],
+          [VERTICAL_FILL_KEY]: maxCaseCount - dataPoint[TOTAL_CASES_KEY] - dataPoint[TOTAL_DEATHS_KEY],
         }
       })
     })
@@ -53,7 +56,7 @@ function getCaseTotals() {
     .then((res) => {
       if (res.status === 200) {
         if (res.data.data) {
-          return res.data.data
+          const caseTotals = res.data.data
             .map((dataPoint) => {
               return {
                 date: moment.utc(dataPoint.as_of),
@@ -64,6 +67,15 @@ function getCaseTotals() {
               }
             })
             .filter(dataPoint => dataPoint.date >= dateOfEarliestData);
+
+          const maxCaseCount = caseTotals.reduce((acc, cur) => {
+            return Math.max(acc, cur[TOTAL_CASES_KEY] + cur[TOTAL_DEATHS_KEY]);
+          }, 0);
+
+          return {
+            caseTotals,
+            maxCaseCount
+          }
         }
       }
     })
