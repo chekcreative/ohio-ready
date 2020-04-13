@@ -15,7 +15,7 @@ function FullBarChart(props) {
       data={props.chartData}
       keys={props.keys}
       indexBy={props.indexBy}
-      margin={{ top: 0, right: 0, bottom: 20, left: 40 }}
+      margin={{ top: 0, right: 5, bottom: 20, left: 40 }}
       tooltip={CustomTooltip}
       gridYValues={5}
       axisBottom={{
