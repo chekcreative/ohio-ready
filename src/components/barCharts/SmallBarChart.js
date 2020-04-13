@@ -15,7 +15,7 @@ function SmallBarChart(props) {
       data={props.chartData}
       keys={props.keys}
       indexBy={props.indexBy}
-      margin={{ top: 0, right: 0, bottom: 15, left: 40 }}
+      margin={{ top: 0, right: 5, bottom: 15, left: 40 }}
       tooltip={CustomTooltip}
       gridYValues={4}
       axisBottom={{
