@@ -1,5 +1,5 @@
 import React from "react";
-import {Bar, ResponsiveBar} from "@nivo/bar";
+import {ResponsiveBar} from "@nivo/bar";
 import {buildCustomTick, buildCustomTooltip, commonBarProperties, nivoTheme} from "../../utils/barChartStyling";
 
 
@@ -16,7 +16,7 @@ function FullBarChart(props) {
       data={props.chartData}
       keys={props.keys}
       indexBy={props.indexBy}
-      margin={{top: 0, right: 0, bottom: 65, left: 40}}
+      margin={{ top: 0, right: 5, bottom: 20, left: 40 }}
       tooltip={CustomTooltip}
       gridYValues={5}
       axisBottom={{
@@ -41,19 +41,6 @@ function FullBarChart(props) {
           </g>)
         }
       }}
-      legends={[
-        {
-          dataFrom: 'keys',
-          anchor: 'bottom-left',
-          direction: 'row',
-          translateX: 0,
-          translateY: 60,
-          itemWidth: 125,
-          itemHeight: 20,
-          itemTextColor: theme.legends.text.fill,
-        }
-      ]}
-      layers={['grid', 'bars', 'axes', 'markers', 'legends', 'annotations']}
       theme={theme}
     />
   )
