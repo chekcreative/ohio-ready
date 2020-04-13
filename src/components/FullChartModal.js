@@ -18,7 +18,8 @@ import closeIcon from "../icons/close_white.svg";
 
 // utils
 import {AS_OF_KEY, getDailyCaseTotals, TOTAL_CASES_KEY, TOTAL_DEATHS_KEY} from "../utils/getAggregateCaseData";
-import {caseData} from "../sampleData/dailyCaseData_20200413";
+
+// import {caseData} from "../sampleData/dailyCaseData_20200413";
 
 
 const useStyles = makeStyles((theme) => ({
