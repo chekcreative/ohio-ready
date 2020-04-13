@@ -13,7 +13,7 @@ const colors = {
 };
 
 export const commonBarProperties = {
-  padding: 0.2,
+  padding: 0.1,
   enableLabel: false,
   enableGridX: false,
   enableGridY: true,
