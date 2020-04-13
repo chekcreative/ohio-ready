@@ -182,14 +182,6 @@ function FullChartModal(props) {
     };
   }, []);
 
-  useEffect(() => {
-    console.log(chartWrapper.current);
-    console.log(chartWrapper.current.scrollWidth);
-    console.log(chartWrapper.current.clientWidth);
-    console.log(chartWrapper.current.scrollWidth - chartWrapper.current.clientWidth);
-  }, [chartData]);
-
-
   const getCaseData = () => {
     return getDailyCaseTotals()
       .then((newChartData) => {
