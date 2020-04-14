@@ -1,17 +1,17 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, {useEffect, useState} from 'react';
 import debounce from 'lodash.debounce';
-import { setDateFromScroll } from "../../actions/actions";
-import { connect } from "react-redux";
+import {setDateFromScroll} from "../../actions/actions";
+import {connect} from "react-redux";
 // import {sampleIncluded, sampleNewsObjects} from "../../sampleData/apiData_20200329";
-import { triggeringAgents } from "../../reducers/reducer";
+import {triggeringAgents} from "../../reducers/reducer";
 // styling
-import { makeStyles } from '@material-ui/core/styles';
+import {makeStyles} from '@material-ui/core/styles';
 // material ui components
 import Grid from '@material-ui/core/Grid';
 import Button from "@material-ui/core/Button";
 // custom components
 import NewsItem from './NewsItem'
-import FilterSearch from './FilterSearch'
+import ActiveFilters from './ActiveFilters'
 // utils
 import axios from 'axios';
 import axiosHeader from '../../utils/axiosHeader'
@@ -25,8 +25,8 @@ import {
 
 const useStyles = makeStyles((theme) => ({
   cardsWrapper: {
-    flexShrink: '1',
-    flexGrow: '1',
+    flexShrink: '1', 
+    flexGrow: '1', 
     padding: '0px 16px 0px 16px',
     position: 'relative',
     maxWidth: 'calc(100% - 243px - 15px - 68px - 15px)',
@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
       margin: '0px auto 50px auto',
       padding: '0px 8px',
       position: 'static'
-    }
+    } 
   },
   showMoreButton: {
     position: 'static',
@@ -80,18 +80,12 @@ function NewsWrapper(props) {
   const [authorizerNameFilter, setAuthorizerNameFilter] = useState(null)
   const [scopeFilter, setScopeFilter] = useState(null)
   const [tagFilter, setTagFilter] = useState([])
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const filterOptions = useMemo(() => {
-    const categorySet = new Set(['tags', 'authorizers', 'locations'])
-    return included.filter(object => categorySet.has(object.type))
-  }, [included])
-  const [availableFilters, setAvailableFilters] = useState(filterOptions);
 
   useEffect(() => {
     const viewDate = new Date(props.viewDateString);
     const earliestFetchedPublishDate = getEarliestFetchedPublishDate(newsObjects);
 
-    if (earliestFetchedPublishDate && viewDate < earliestFetchedPublishDate) {
+    if (earliestFetchedPublishDate && viewDate < earliestFetchedPublishDate){
       if (morePagesAvailable) {
         setMorePagesNeeded(true);
         loadEvents()
@@ -114,12 +108,8 @@ function NewsWrapper(props) {
     loadEvents()
   }, [authorizerNameFilter, scopeFilter, tagFilter])
 
-  useEffect(() => {
-    loadAvailableFilters()
-  }, [])
-
   const loadEvents = () => {
-    let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article,article.publisher&page%5Bnumber%5D=${numberPagesLoaded + 1}`
+    let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article,article.publisher&page%5Bnumber%5D=${numberPagesLoaded+1}`
 
     if (authorizerNameFilter !== null) {
       requestString += `&authorizer__name=${encodeURIComponent(authorizerNameFilter)}`
@@ -130,10 +120,11 @@ function NewsWrapper(props) {
     }
 
     if (tagFilter.length !== 0) {
-      tagFilter.forEach((tag) => {
+      tagFilter.forEach( (tag) => {
         requestString += `&tags=${encodeURIComponent(tag.id)}`
       })
     }
+
 
     setIsFetching(true);
     if (morePagesAvailable) {
@@ -141,7 +132,7 @@ function NewsWrapper(props) {
         .then(
           (res) => {
             if (res.data.data) {
-              setNumberPagesLoaded(numberPagesLoaded + 1);
+              setNumberPagesLoaded(numberPagesLoaded+1);
               setNewsObjects(numberPagesLoaded ? newsObjects.concat(res.data.data) : res.data.data);
             }
             if (res.data.included) {
@@ -166,33 +157,20 @@ function NewsWrapper(props) {
           }
         )
         .then(() => {
-          setIsFetching(false);
-        }
+            setIsFetching(false);
+          }
         )
     }
   };
 
-  const loadAvailableFilters = async () => {
-    let requestStrings = [
-      `https://ohioready-api.zwink.net/v1/tag`,
-      `https://ohioready-api.zwink.net/v1/authorizer`,
-    ];
-
-    const responses = await Promise.all(
-      requestStrings.map(requestString => axios.get(requestString, axiosHeader)
-      ));
-    const tags = responses.map(response => response.data.data).flat();
-    setAvailableFilters(tags)
-  }
-
-  const toggleAuthorizerNameFilter = (authorizer) => {
+  const toggleAuthorizerNameFilter = (authorizer_name) => {
     setNumberPagesLoaded(0)
     setNewsObjects([])
     setMorePagesAvailable(true)
-    if (authorizerNameFilter && authorizerNameFilter.attributes.name === authorizer.attributes.name) {
+    if (authorizerNameFilter === authorizer_name) {
       setAuthorizerNameFilter(null)
     } else {
-      setAuthorizerNameFilter(authorizer)
+      setAuthorizerNameFilter(authorizer_name)
     }
   }
 
@@ -200,33 +178,46 @@ function NewsWrapper(props) {
     setNumberPagesLoaded(0)
     setNewsObjects([])
     setMorePagesAvailable(true)
-    if (scopeFilter && scopeFilter.attributes.name === scope.attributes.name) {
+    if (scopeFilter === scope) {
       setScopeFilter(null)
     } else {
       setScopeFilter(scope)
     }
   }
 
-  const toggleTagFilter = (tag) => {
+  const checkTagFilterForName = (tagName) => {
+    var isIncluded = false
+    tagFilter.forEach( (tagFilterItem) => {
+      if (tagFilterItem.name === tagName) {
+        isIncluded = true
+      }
+    })
+    return isIncluded
+  }
+
+  const getIndexOfTag = (tagName) => {
+    var index = -1
+    tagFilter.forEach( (tagFilterItem) => {
+      if (tagFilterItem.name === tagName) {
+        index = tagFilter.indexOf(tagFilterItem)
+      }
+    })
+    return index
+  }
+
+  const toggleTagFilter = (tag) => {    
     setNumberPagesLoaded(0)
     setNewsObjects([])
     setMorePagesAvailable(true)
-    const currentTagArray = tagFilter.concat();
-    const tagFoundAt = currentTagArray.findIndex(filteredTag => filteredTag.attributes.name === tag.attributes.name)
 
-    if (tagFoundAt !== -1) {
-      currentTagArray.splice(tagFoundAt, 1)
+    let currentTagArray = tagFilter
+    if (checkTagFilterForName(tag.name)) {
+      let i = getIndexOfTag(tag.name)
+      currentTagArray.splice(i, 1)
     } else {
       currentTagArray.push(tag)
     }
     setTagFilter([...currentTagArray])
-  }
-
-  const clearFilters = () => {
-    setTagFilter([]);
-    setScopeFilter(null);
-    setAuthorizerNameFilter(null);
-    setNumberPagesLoaded(0);
   }
 
   const updateViewDate = () => {
@@ -251,20 +242,21 @@ function NewsWrapper(props) {
 
   return (
     <Grid container spacing={2} direction="column" className={classes.cardsWrapper}>
-      <FilterSearch
-        open={isSearchOpen}
-        options={availableFilters}
-        setIsOpen={setIsSearchOpen}
-        selectedOptions={[...tagFilter, authorizerNameFilter, scopeFilter].filter(Boolean)}
-        toggleAuthorizerNameFilter={toggleAuthorizerNameFilter}
-        toggleScopeFilter={toggleScopeFilter}
-        toggleTagFilter={toggleTagFilter}
-        clearFilters={clearFilters}
-      />
+      {
+        authorizerNameFilter || scopeFilter || tagFilter.length > 0 ?
+        <ActiveFilters
+          authorizerNameFilter={authorizerNameFilter}
+          toggleAuthorizerNameFilter={toggleAuthorizerNameFilter}
+          scopeFilter={scopeFilter}
+          toggleScopeFilter={toggleScopeFilter}
+          tagFilter={tagFilter}
+          toggleTagFilter={toggleTagFilter}></ActiveFilters> : 
+        null
+      }
       {
         newsObjects.map((newsObject, i) =>
-          <Grid item key={'newsItem' + i} style={{ maxWidth: '100%' }} name={NEWS_ITEM_NAME}>
-            <NewsItem
+          <Grid item key={'newsItem' + i} style={{maxWidth: '100%'}} name={NEWS_ITEM_NAME}>
+            <NewsItem 
               newsObject={newsObject}
               included={included}
               authorizerNameFilter={authorizerNameFilter}
