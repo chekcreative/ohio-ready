@@ -8,7 +8,7 @@ import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import Chip from '@material-ui/core/Chip';
 
-// icons
+// icons 
 import share from '../../icons/share.svg'
 import globe from '../../icons/globe.svg'
 import link from '../../icons/link.svg'
@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: '14.5px'
   },
   chipWrapper: {
-    flexShrink: '1',
+    flexShrink: '1', 
     flexGrow: '1',
     maxWidth: 'calc(100% - 32px)' // 24px for share icon + 8px spacing to keep in the top right corener
   },
@@ -93,10 +93,10 @@ const useStyles = makeStyles((theme) => ({
 
 const NewsItem = (props) => {
   const classes = useStyles();
-
+  
   const handlers = {
     NEXT_EVENT: event => {
-      var nextEvent = event.target.parentElement.parentElement.nextSibling.firstChild.firstChild;
+      var nextEvent = event.target.parentElement.parentElement.nextSibling.firstChild.firstChild; 
       if(nextEvent && nextEvent.nodeType === Node.ELEMENT_NODE) {
         nextEvent.scrollIntoView();
         event.target.parentElement.parentElement.nextSibling.firstChild.firstChild.focus();
@@ -106,7 +106,7 @@ const NewsItem = (props) => {
     },
     PREVIOUS_EVENT: event => {
       if(event.target.parentElement.parentElement.previousSibling) {
-        var previousEvent = event.target.parentElement.parentElement.previousSibling.firstChild.firstChild;
+        var previousEvent = event.target.parentElement.parentElement.previousSibling.firstChild.firstChild; 
         if(previousEvent && previousEvent.nodeType === Node.ELEMENT_NODE) {
           previousEvent.scrollIntoView();
           event.target.parentElement.parentElement.previousSibling.firstChild.firstChild.focus();
@@ -117,13 +117,13 @@ const NewsItem = (props) => {
     }
   };
 
-  // get the authorizer name out of the 'included' array from API call
+  // get the authorizer name out of the 'included' array from API call 
   const authorizer = props.included.find( (el) =>
     el.id == props.newsObject.relationships.authorizer.data.id &&
     el.type == props.newsObject.relationships.authorizer.data.type
   )
 
-  // get each tag name out of the 'included' array from API call
+  // get each tag name out of the 'included' array from API call 
   const tagsArray = []
   props.newsObject.relationships.tags.data.forEach( (tagObject) => {
     let matchingTag = props.included.find((el) =>
@@ -166,7 +166,7 @@ const NewsItem = (props) => {
   const checkTagFilterForName = (tagName) => {
     var isIncluded = false
     props.tagFilter.forEach( (tagFilterItem) => {
-      if (tagFilterItem.attributes.name === tagName) {
+      if (tagFilterItem.name === tagName) {
         isIncluded = true
       }
     })
@@ -184,25 +184,24 @@ const NewsItem = (props) => {
               {
                 props.newsObject.relationships.authorizer.data.id &&
                 props.newsObject.relationships.authorizer.data.type &&
-                props.authorizerNameFilter &&
-                authorizer &&
+                authorizer && 
                 authorizer.attributes.name ?
                 <Grid item>
                   <Chip
-                    className={props.authorizerNameFilter.attributes.name === authorizer.attributes.name ? classes.activeFilterChip : null}
-                    onClick={() => props.toggleAuthorizerNameFilter(authorizer)}
-                    label={
+                    className={props.authorizerNameFilter === authorizer.attributes.name ? classes.activeFilterChip : null}
+                    onClick={() => props.toggleAuthorizerNameFilter(authorizer.attributes.name)}
+                    label={ 
                       authorizer.attributes.name
                     }></Chip>
                 </Grid> :
                 null
               }
               {
-                props.newsObject.attributes.scope && props.scopeFilter ?
+                props.newsObject.attributes.scope ?
                 <Grid item>
                   <Chip
-                    className={props.scopeFilter.attributes.name === props.newsObject.attributes.scope ? classes.activeFilterChip : null}
-                    onClick={() => props.toggleScopeFilter({ type: 'scope', attributes: { scope: props.newsObject.attributes.scope }})}
+                    className={props.scopeFilter === props.newsObject.attributes.scope ? classes.activeFilterChip : null}
+                    onClick={() => props.toggleScopeFilter(props.newsObject.attributes.scope)}
                     label={ props.newsObject.attributes.scope }></Chip>
                 </Grid> :
                 null
@@ -210,13 +209,13 @@ const NewsItem = (props) => {
               {
                 tagsArray.length > 0 ?
                   tagsArray.map((tag, i) =>
-                    tag &&
+                    tag && 
                     tag.attributes &&
                     tag.attributes.name ?
                     <Grid item key={'tagChip' + i}>
-                      <Chip
+                      <Chip 
                         className={checkTagFilterForName(tag.attributes.name) ? classes.activeFilterChip : null}
-                        onClick={() => props.toggleTagFilter(tag)}
+                        onClick={() => props.toggleTagFilter({name: tag.attributes.name, id: tag.id})}
                         label={ tag.attributes.name }></Chip>
                     </Grid> :
                     null
@@ -224,7 +223,7 @@ const NewsItem = (props) => {
                   null
               }
             </Grid>
-
+            
             {/* TODO: build this feature - https://github.com/chekcreative/ohio-ready/issues/37 */}
             {/* <img src={share} className={classes.shareIcon}></img> */}
 
@@ -255,7 +254,7 @@ const NewsItem = (props) => {
             props.newsObject.attributes.title ?
             <h2 className={classes.newsCardHeading}>
               { props.newsObject.attributes.title }
-            </h2> :
+            </h2> : 
             null
           }
 
@@ -263,7 +262,7 @@ const NewsItem = (props) => {
 
           {/* tweet, if applicable */}
 
-
+          
         </div>
 
         {/* ====================================================================== */}
@@ -278,14 +277,14 @@ const NewsItem = (props) => {
                 props.newsObject.attributes &&
                 props.newsObject.attributes.authoritative_url ?
                 <a href={ props.newsObject.attributes.authoritative_url } rel="noopener noreferrer" target="_blank">
-                  {
+                  {   
                     authorizer &&
                     authorizer.attributes &&
-                    authorizer.attributes.name ?
-                    authorizer.attributes.name :
+                    authorizer.attributes.name ? 
+                    authorizer.attributes.name : 
                     null
                   }
-                </a> :
+                </a> : 
                 null
               }
             </div>
