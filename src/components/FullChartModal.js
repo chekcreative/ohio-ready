@@ -19,6 +19,8 @@ import closeIcon from "../icons/close_white.svg";
 // utils
 import {AS_OF_KEY, getDailyCaseTotals, TOTAL_CASES_KEY, TOTAL_DEATHS_KEY} from "../utils/getAggregateCaseData";
 
+// import {caseData} from "../sampleData/dailyCaseData_20200413";
+
 
 const useStyles = makeStyles((theme) => ({
   cover: {
@@ -88,6 +90,10 @@ const useStyles = makeStyles((theme) => ({
   sticky: {
     position: 'sticky',
     top: '32px'
+  },
+  chartSource: {
+    textAlign: 'right',
+    margin: 0,
   }
 }));
 
@@ -111,7 +117,7 @@ function FullChartModal(props) {
     return () => {
       document.removeEventListener("keydown", escFunction, false);
     };
-  });
+  }, []);
 
   const getCaseData = () => {
     getDailyCaseTotals()
@@ -149,6 +155,11 @@ function FullChartModal(props) {
                 keys={[TOTAL_DEATHS_KEY, TOTAL_CASES_KEY]}
                 indexBy={AS_OF_KEY}
               />
+            </div>
+            <div>
+              <p className={classes.chartSource}>
+                SOURCE: <a href="http://coronavirus.ohio.gov/" rel="noopener noreferrer" target="_blank">Ohio Department of Health</a>
+              </p>
             </div>
           </Card>
         </div>

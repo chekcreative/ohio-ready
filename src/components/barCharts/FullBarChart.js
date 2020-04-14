@@ -34,7 +34,7 @@ function FullBarChart(props) {
           anchor: 'bottom-left',
           direction: 'row',
           translateX: 0,
-          translateY: 65,
+          translateY: 60,
           itemWidth: 125,
           itemHeight: 20,
           itemTextColor: theme.legends.text.fill,

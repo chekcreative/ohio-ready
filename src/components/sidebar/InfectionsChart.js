@@ -69,8 +69,8 @@ function InfectionsChart(props) {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-      getCaseData()
-    });
+    getCaseData()
+  }, []);
 
   const getCaseData = () => {
     getSaturdayCaseTotals()
