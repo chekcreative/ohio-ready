@@ -122,11 +122,11 @@ function NewsWrapper(props) {
     let requestString = `https://ohioready-api.zwink.net/v1/event/?include=authorizer,tags,article,article.publisher&page%5Bnumber%5D=${numberPagesLoaded + 1}`
 
     if (authorizerNameFilter !== null) {
-      requestString += `&authorizer__name=${encodeURIComponent(authorizerNameFilter)}`
+      requestString += `&authorizer__name=${encodeURIComponent(authorizerNameFilter.attributes.name)}`
     }
 
     if (scopeFilter !== null) {
-      requestString += `&scope=${encodeURIComponent(scopeFilter)}`
+      requestString += `&scope=${encodeURIComponent(scopeFilter.attributes.name)}`
     }
 
     if (tagFilter.length !== 0) {

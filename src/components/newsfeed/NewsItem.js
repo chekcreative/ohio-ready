@@ -184,12 +184,11 @@ const NewsItem = (props) => {
               {
                 props.newsObject.relationships.authorizer.data.id &&
                 props.newsObject.relationships.authorizer.data.type &&
-                props.authorizerNameFilter &&
                 authorizer &&
                 authorizer.attributes.name ?
                 <Grid item>
                   <Chip
-                    className={props.authorizerNameFilter.attributes.name === authorizer.attributes.name ? classes.activeFilterChip : null}
+                    className={props.authorizerNameFilter?.attributes?.name === authorizer.attributes.name ? classes.activeFilterChip : null}
                     onClick={() => props.toggleAuthorizerNameFilter(authorizer)}
                     label={
                       authorizer.attributes.name
@@ -198,11 +197,11 @@ const NewsItem = (props) => {
                 null
               }
               {
-                props.newsObject.attributes.scope && props.scopeFilter ?
+                props.newsObject.attributes.scope ?
                 <Grid item>
                   <Chip
-                    className={props.scopeFilter.attributes.name === props.newsObject.attributes.scope ? classes.activeFilterChip : null}
-                    onClick={() => props.toggleScopeFilter({ type: 'scope', attributes: { scope: props.newsObject.attributes.scope }})}
+                    className={props.scopeFilter?.attributes?.name === props.newsObject.attributes.scope ? classes.activeFilterChip : null}
+                    onClick={() => props.toggleScopeFilter({ type: 'locations', attributes: { name: props.newsObject.attributes.scope }})}
                     label={ props.newsObject.attributes.scope }></Chip>
                 </Grid> :
                 null
