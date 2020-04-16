@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 
 // redux
 import {connect} from "react-redux";
@@ -17,7 +17,14 @@ import FullBarChart from "./barCharts/FullBarChart";
 import closeIcon from "../icons/close_white.svg";
 
 // utils
-import {AS_OF_KEY, getDailyCaseTotals, TOTAL_CASES_KEY, TOTAL_DEATHS_KEY} from "../utils/getAggregateCaseData";
+import {
+  AS_OF_KEY,
+  getDailyCaseTotals,
+  TOTAL_CASES_KEY,
+  TOTAL_DEATHS_KEY,
+  VERTICAL_FILL_KEY
+} from "../utils/getAggregateCaseData";
+import {barChartColors} from "../utils/barChartStyling";
 
 // import {caseData} from "../sampleData/dailyCaseData_20200413";
 
@@ -84,8 +91,18 @@ const useStyles = makeStyles((theme) => ({
     width: '100%',
   },
   chartWrapper: {
-    height: '41rem',
+    height: '40rem',
     margin: '32px 0 16px',
+    overflowX: 'auto',
+    overflowY: 'hidden',
+  },
+  chartLoading: {
+    display: 'block',
+    height: '100%',
+    width: '100%',
+    textAlign: 'center',
+    fontSize: '24px',
+    lineHeight: '38rem',
   },
   sticky: {
     position: 'sticky',
@@ -94,14 +111,56 @@ const useStyles = makeStyles((theme) => ({
   chartSource: {
     textAlign: 'right',
     margin: 0,
+  },
+  chartLegend: {
+    height: '16px',
+    marginLeft: '40px',
+    marginBottom: '16px',
+  },
+  chartLegendItem: {
+    display: 'inline-block',
+    height: '16px',
+    marginRight: '16px',
+  },
+  chartLegendText: {
+    fontSize: '12px',
+    verticalAlign: 'middle'
+  },
+  chartLegendIndicator: {
+    verticalAlign: 'middle'
   }
 }));
+
+
+function ChartLegend() {
+  const classes = useStyles();
+
+  return (
+    <div className={classes.chartLegend}>
+      <div className={classes.chartLegendItem}>
+        <svg className={classes.chartLegendIndicator} width="24" height="16">
+          <rect width="16" height="16" fill={barChartColors.bar.infected}/>
+        </svg>
+        <span className={classes.chartLegendText}>TOTAL CASES</span>
+      </div>
+      <div className={classes.chartLegendItem}>
+        <svg className={classes.chartLegendIndicator} width="24" height="16">
+          <rect width="16" height="16" fill={barChartColors.bar.deaths}/>
+        </svg>
+        <span className={classes.chartLegendText}>TOTAL DEATHS</span>
+      </div>
+    </div>
+  )
+}
 
 
 function FullChartModal(props) {
 
   const classes = useStyles();
   const [chartData, setChartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [chartScroll, setChartScroll] = useState(0);
+  const chartWrapper = useRef(null);
 
   const escFunction = useCallback((event) => {
     if (event.key === 'Escape') {
@@ -110,7 +169,11 @@ function FullChartModal(props) {
   }, [props]);
 
   useEffect(() => {
-    getCaseData();
+    setIsLoading(true);
+    getCaseData()
+      .then(() => {
+        setIsLoading(false);
+      });
 
     document.addEventListener("keydown", escFunction, false);
 
@@ -120,13 +183,17 @@ function FullChartModal(props) {
   }, []);
 
   const getCaseData = () => {
-    getDailyCaseTotals()
+    return getDailyCaseTotals()
       .then((newChartData) => {
         setChartData(newChartData);
       })
       .catch((err) => {
         console.log(err);
       })
+  };
+
+  const handleScroll = () => {
+    setChartScroll(chartWrapper.current.scrollLeft);
   };
 
   return (
@@ -149,13 +216,20 @@ function FullChartModal(props) {
                   onClick={() => {props.closeFullChart()}}/>
               </div>
             </div>
-            <div className={classes.chartWrapper}>
+            <div
+              className={classes.chartWrapper}
+              ref={chartWrapper}
+              onScroll={handleScroll}
+            >
+              {isLoading && <p className={classes.chartLoading}>LOADING...</p>}
               <FullBarChart
                 chartData={chartData}
-                keys={[TOTAL_DEATHS_KEY, TOTAL_CASES_KEY]}
+                keys={[TOTAL_DEATHS_KEY, TOTAL_CASES_KEY, VERTICAL_FILL_KEY]}
                 indexBy={AS_OF_KEY}
+                scrollPosition={chartScroll}
               />
             </div>
+            {!isLoading && <ChartLegend/>}
             <div>
               <p className={classes.chartSource}>
                 SOURCE: <a href="http://coronavirus.ohio.gov/" rel="noopener noreferrer" target="_blank">Ohio Department of Health</a>

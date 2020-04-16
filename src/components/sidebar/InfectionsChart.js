@@ -14,7 +14,15 @@ import SmallBarChart from "../barCharts/SmallBarChart";
 import fullscreenIcon from "../../icons/fullscreen_white.svg";
 
 // utils
-import {AS_OF_KEY, getSaturdayCaseTotals, TOTAL_CASES_KEY, TOTAL_DEATHS_KEY} from "../../utils/getAggregateCaseData";
+import {
+  AS_OF_KEY,
+  getSaturdayCaseTotals,
+  TOTAL_CASES_KEY,
+  TOTAL_DEATHS_KEY,
+  VERTICAL_FILL_KEY
+} from "../../utils/getAggregateCaseData";
+
+// import {caseData} from "../../sampleData/weeklyCaseData_20200413";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -100,7 +108,7 @@ function InfectionsChart(props) {
       <div className={classes.barChartWrapper}>
         <SmallBarChart
           chartData={chartData}
-          keys={[TOTAL_DEATHS_KEY, TOTAL_CASES_KEY]}
+          keys={[TOTAL_DEATHS_KEY, TOTAL_CASES_KEY, VERTICAL_FILL_KEY]}
           indexBy={AS_OF_KEY}
         />
       </div>

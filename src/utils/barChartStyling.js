@@ -1,6 +1,6 @@
 import React from "react";
 
-const colors = {
+export const barChartColors = {
   text: {
     infected: 'hsla(243, 100%, 60%)',
     deaths: 'red',
@@ -9,6 +9,7 @@ const colors = {
   bar: {
     infected: 'hsla(233, 100%, 83%)',
     deaths: 'red',
+    vertical_fill: "hsla(0, 0%, 0%, 0%)"
   }
 };
 
@@ -20,7 +21,7 @@ export const commonBarProperties = {
   animate: true,
   motionStiffness: 200,
   motionDamping: 30,
-  colors: [colors.bar.deaths, colors.bar.infected]
+  colors: [barChartColors.bar.deaths, barChartColors.bar.infected, barChartColors.bar.vertical_fill]
 };
 
 export function nivoTheme(fontSize) {
@@ -29,7 +30,7 @@ export function nivoTheme(fontSize) {
       ticks: {
         text: {
           fontSize: fontSize,
-          fill: colors.text.labels,
+          fill: barChartColors.text.labels,
           fontFamily: 'inherit',
         }
       }
@@ -38,14 +39,14 @@ export function nivoTheme(fontSize) {
       text: {
         fontSize: fontSize,
         fontWeight: '700',
-        fill: colors.text.labels,
+        fill: barChartColors.text.labels,
       }
     }
   }
 }
 
 export function buildCustomTick(dataLength, nTicksToShow, theme) {
-  let tickInterval = Math.floor(dataLength / (nTicksToShow - 1));
+  let tickInterval = Math.min(7, Math.floor(dataLength / (nTicksToShow - 1)));
 
   return tick => {
     let showTick = (dataLength - tick.tickIndex - 1) % tickInterval === 0;
@@ -72,10 +73,10 @@ export function buildCustomTooltip(indexBy, keys, fontSize) {
       <p style={{margin: 0, fontSize: fontSize}}>
         AS OF {data[indexBy]}
       </p>
-      <p style={{color: colors.text.infected, margin: 0, fontSize: fontSize}}>
+      <p style={{color: barChartColors.text.infected, margin: 0, fontSize: fontSize}}>
         {data[keys[1]]} CASES
       </p>
-      <p style={{color: colors.text.deaths, margin: 0, fontSize: fontSize}}>
+      <p style={{color: barChartColors.text.deaths, margin: 0, fontSize: fontSize}}>
         {data[keys[0]]} DEATHS
       </p>
     </div>
