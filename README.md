@@ -15,6 +15,7 @@ Thanks to all of the **Individual contributors** to this project:
 - [Derek DeHart](https://www.linkedin.com/in/derekdehart/)
 - [Jackson Corbisello](https://github.com/jcorbisello)
 - [Jordan Davis](https://www.linkedin.com/in/jordan-davis-96116310/)
+- [Katie Moon](https://github.com/katiemoon1)
 - [Joseph Chekanoff](https://github.com/jchekanoff)
 - [Rob Zwink](https://github.com/rzwink)
 - [Robert Melchor](https://www.linkedin.com/in/robert-j-melchor-pmp-psm-97570555)
