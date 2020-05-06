@@ -1,4 +1,5 @@
 import React from 'react';
+import SimpleModal from './Disclaimer'
 
 // styling
 import { makeStyles } from '@material-ui/core/styles';
@@ -12,6 +13,7 @@ const useStyles = makeStyles((theme) => ({
     width: '100vw',
     backgroundColor: '#fff',
     display: 'flex',
+    flexWrap: 'wrap',
     alignItems: 'center',
     justifyContent: 'center',
     padding: '8px 10vw',
@@ -58,7 +60,8 @@ function StickyFooter() {
       <div className={classes.footerTextWrapperMobile}>
         w/ <span role='img' aria-label='heart emoji'>💜</span> by <a href="https://github.com/chekcreative/ohio-ready/" rel="noopener noreferrer" target="_blank" className={classes.footerTextLink}>us</a> for <a href="https://cantstopcolumbus.com" rel="noopener noreferrer" target="_blank" className={classes.footerTextLink}>Can't Stop Columbus</a>
       </div>
-    </div>
+      <SimpleModal />
+    </div >
   );
 }
 
