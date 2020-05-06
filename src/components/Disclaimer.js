@@ -40,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export default function SimpleModal() {
+export default function Disclaimer() {
   const classes = useStyles();
   const [modalStyle] = React.useState(getModalStyle);
   const [open, setOpen] = React.useState(false);
